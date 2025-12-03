@@ -1,0 +1,79 @@
+Sales Commission Web Resources Requirement
+Purpose of This Layout
+This document outlines the requirements for the SE-BC-SWC Commission Layout system, which is designed to help the management of sales commission assignments for the SE, BC, and SWC categories. The system allows users to efficiently view and update territory numbers, manage associated usernames, and set override flags for each commission category.
+Panels Included
+The commission layout interface is organized into three collapsible panels, each corresponding to a specific category:
+•	SE Panel: Has commission assignments related to Specification and Selling roles within the SE category.
+•	BC Panel: Has commission assignments for Specification and Selling roles within the BC category.
+•	SWC Panel: Has commission assignments for Specification and Selling roles within the SWC category.
+Fields Included in Each Panel
+Each panel displays a series of rows corresponding to different commission assignment types. The rows included are:
+•	Spec1
+•	Sell1
+•	Dest1
+•	Spec2
+•	Sell2
+•	Spec 30%
+For each row within a panel, the following fields are present:
+•	Territory Number Input: Allows users to enter the relevant territory number.
+•	Hidden Zip code Field: Has zip code data associated with the territory, not visible to the user.
+•	Username: Automatically populated based on the territory and zip code data.
+•	Override Checkbox: Enables users to override default commission assignment settings when necessary.
+Lookup Functionality
+Each territory row provides a search (🔍) icon. Clicking this icon opens a modal window that enables users to search for ZIP code-based records. The lookup uses Data Tables, providing advanced filtering, search, and pagination functionalities for efficient record choice.
+Territory Validation Logic
+When a user manually enters a territory number, the system confirms the entry against preloaded SE, BC, and SWC zip code datasets. If the entered territory number is invalid, an alert message appears, and the system restores the earlier valid value in the field.
+Data Loading Logic
+Upon loading the page, the system retrieves commission data relevant to the current sales order using Fetch xml queries. Linked zip code records are also loaded at this stage, enabling the automatic population of usernames and territory fields based on the retrieved data.
+Audit Trail Feature
+To ensure transparency and accountability, an audit popup is available that displays a complete record of all field changes. The audit trail includes the following details for each change:
+•	Changed By (the user who made the modification)
+•	Change Date (timestamp of the modification)
+•	Field Name (the specific field that was changed)
+•	Old Territory & User (the earlier values)
+•	New Territory & User (the updated values)
+Auto Expand/Collapse
+Panels are designed to automatically expand if they have any valid commission data. If no valid data is present within a panel, it stays collapsed by default for a streamlined user experience.
+Technologies Used
+The following technologies are used in the development and operation of the SE-BC-SWC Commission Layout:
+•	HTML and CSS for the user interface layout and design
+•	JavaScript and jQuery for dynamic behavior and interactivity
+•	Data Tables for enhanced lookup popup functionality
+•	Dynamics 365 Xrm.WebApi and FetchXML for data retrieval and manipulation
+•	Modal UI components for look-up and audit popups
+
+Entity Details
+•	crmgp_salescommission
+•	new_zipcode
+•	crmgp_salescommission_audit_trail
+•	Salesorder
+Entity Relationship -SE
+•	Order -> crmgp_salescommission ->SEDestZipcode -> SEnameid -> system user 
+•	Order -> crmgp_salescommission -> SESell1Zipcode-> SEnameid -> system user 
+•	Order -> crmgp_salescommission -> SESell2Zipcode-> SEnameid -> system user
+•	Order -> crmgp_salescommission -> SESpec1Zipcode-> SEnameid -> system user 
+•	Order -> crmgp_salescommission -> SESpec2Zipcode-> SEnameid -> system user
+•	Order -> crmgp_salescommission -> SESpec30
+
+Entity Relationship –BC
+•	Order -> crmgp_salescommission -> BCDest1Zipcode-> BCnameid -> system user 
+•	Order -> crmgp_salescommission -> BCSpec1Zipcode-> BCnameid -> system user 
+•	Order -> crmgp_salescommission -> BCSpec2Zipcode-> BCnameid -> system user 
+•	Order -> crmgp_salescommission -> BCSell1Zipcode-> BCnameid -> system user 
+•	Order -> crmgp_salescommission -> BCSell2Zipcode-> BCnameid -> system user 
+•	Order -> crmgp_salescommission -> BCSpec30 
+
+Entity Relationship -SWC
+•	Order -> crmgp_salescommission -> SWCDest1Zipcode-> SWCnameid -> system user 
+•	Order -> crmgp_salescommission -> SWCSell1Zipcode-> SWCnameid -> system user 
+•	Order -> crmgp_salescommission -> SWCSell2Zipcode-> SWCnameid -> system user 
+•	Order -> crmgp_salescommission -> SWCSpec1Zipcode-> SWCnameid -> system user 
+•	Order -> crmgp_salescommission -> SWCSpec2Zipcode-> SWCnameid -> system user 
+•	Order -> crmgp_salescommission -> SWCSpec30
+
+
+Entity Relationship - crmgp_salescommission_audit_trail
+•	SalesOrder -> crmgp_salescommission_audit_trail
+
+
+
