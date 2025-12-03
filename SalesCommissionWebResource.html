@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Commission Layout</title>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 2px solid #0078d4;
+            padding-bottom: 10px;
+        }
+
+        .panel {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background-color: #0078d4;
+            color: white;
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .panel-header:hover {
+            background-color: #106ebe;
+        }
+
+        .panel-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .panel-header .toggle-icon {
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .panel-header .toggle-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .panel-content {
+            padding: 15px;
+            background-color: #fafafa;
+            display: none;
+        }
+
+        .panel-content.expanded {
+            display: block;
+        }
+
+        .commission-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .commission-table th {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .commission-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .commission-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .territory-input {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 150px;
+            font-size: 14px;
+        }
+
+        .territory-input:focus {
+            outline: none;
+            border-color: #0078d4;
+            box-shadow: 0 0 0 2px rgba(0,120,212,0.1);
+        }
+
+        .username-display {
+            padding: 6px 10px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            min-width: 200px;
+            display: inline-block;
+        }
+
+        .lookup-btn {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+
+        .lookup-btn:hover {
+            background-color: #106ebe;
+        }
+
+        .override-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .audit-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .audit-btn:hover {
+            background-color: #218838;
+        }
+
+        .save-btn {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-right: 10px;
+        }
+
+        .save-btn:hover {
+            background-color: #106ebe;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 900px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0078d4;
+        }
+
+        .modal-header h2 {
+            color: #333;
+            font-size: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #f5c6cb;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #c3e6cb;
+            margin-bottom: 15px;
+        }
+
+        .dataTables_wrapper {
+            margin-top: 15px;
+        }
+
+        .audit-table {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .audit-table th {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .audit-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .row-label {
+            font-weight: 600;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sales Commission Layout</h1>
+
+        <div id="messageContainer"></div>
+
+        <!-- SE Panel -->
+        <div class="panel" id="sePanel">
+            <div class="panel-header" onclick="togglePanel('sePanel')">
+                <h2>SE Commission Assignments</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="panel-content">
+                <table class="commission-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Territory Number</th>
+                            <th>Username</th>
+                            <th>Override</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-label">Spec1</td>
+                            <td>
+                                <input type="text" class="territory-input" id="seSpec1Territory" data-category="SE" data-type="Spec1" data-zipcode-field="SESpec1Zipcode" data-user-field="SESpec1User">
+                                <button class="lookup-btn" onclick="openLookup('SE', 'Spec1')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="seSpec1User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="seSpec1Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Sell1</td>
+                            <td>
+                                <input type="text" class="territory-input" id="seSell1Territory" data-category="SE" data-type="Sell1" data-zipcode-field="SESell1Zipcode" data-user-field="SESell1User">
+                                <button class="lookup-btn" onclick="openLookup('SE', 'Sell1')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="seSell1User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="seSell1Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Dest1</td>
+                            <td>
+                                <input type="text" class="territory-input" id="seDestTerritory" data-category="SE" data-type="Dest" data-zipcode-field="SEDestZipcode" data-user-field="SEDestUser">
+                                <button class="lookup-btn" onclick="openLookup('SE', 'Dest')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="seDestUser"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="seDestOverride"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Spec2</td>
+                            <td>
+                                <input type="text" class="territory-input" id="seSpec2Territory" data-category="SE" data-type="Spec2" data-zipcode-field="SESpec2Zipcode" data-user-field="SESpec2User">
+                                <button class="lookup-btn" onclick="openLookup('SE', 'Spec2')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="seSpec2User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="seSpec2Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Sell2</td>
+                            <td>
+                                <input type="text" class="territory-input" id="seSell2Territory" data-category="SE" data-type="Sell2" data-zipcode-field="SESell2Zipcode" data-user-field="SESell2User">
+                                <button class="lookup-btn" onclick="openLookup('SE', 'Sell2')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="seSell2User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="seSell2Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Spec 30%</td>
+                            <td>
+                                <input type="text" class="territory-input" id="seSpec30Territory" data-category="SE" data-type="Spec30" data-zipcode-field="SESpec30Zipcode" data-user-field="SESpec30User">
+                                <button class="lookup-btn" onclick="openLookup('SE', 'Spec30')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="seSpec30User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="seSpec30Override"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BC Panel -->
+        <div class="panel" id="bcPanel">
+            <div class="panel-header" onclick="togglePanel('bcPanel')">
+                <h2>BC Commission Assignments</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="panel-content">
+                <table class="commission-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Territory Number</th>
+                            <th>Username</th>
+                            <th>Override</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-label">Spec1</td>
+                            <td>
+                                <input type="text" class="territory-input" id="bcSpec1Territory" data-category="BC" data-type="Spec1" data-zipcode-field="BCSpec1Zipcode" data-user-field="BCSpec1User">
+                                <button class="lookup-btn" onclick="openLookup('BC', 'Spec1')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="bcSpec1User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="bcSpec1Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Sell1</td>
+                            <td>
+                                <input type="text" class="territory-input" id="bcSell1Territory" data-category="BC" data-type="Sell1" data-zipcode-field="BCSell1Zipcode" data-user-field="BCSell1User">
+                                <button class="lookup-btn" onclick="openLookup('BC', 'Sell1')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="bcSell1User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="bcSell1Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Dest1</td>
+                            <td>
+                                <input type="text" class="territory-input" id="bcDestTerritory" data-category="BC" data-type="Dest" data-zipcode-field="BCDest1Zipcode" data-user-field="BCDestUser">
+                                <button class="lookup-btn" onclick="openLookup('BC', 'Dest')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="bcDestUser"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="bcDestOverride"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Spec2</td>
+                            <td>
+                                <input type="text" class="territory-input" id="bcSpec2Territory" data-category="BC" data-type="Spec2" data-zipcode-field="BCSpec2Zipcode" data-user-field="BCSpec2User">
+                                <button class="lookup-btn" onclick="openLookup('BC', 'Spec2')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="bcSpec2User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="bcSpec2Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Sell2</td>
+                            <td>
+                                <input type="text" class="territory-input" id="bcSell2Territory" data-category="BC" data-type="Sell2" data-zipcode-field="BCSell2Zipcode" data-user-field="BCSell2User">
+                                <button class="lookup-btn" onclick="openLookup('BC', 'Sell2')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="bcSell2User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="bcSell2Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Spec 30%</td>
+                            <td>
+                                <input type="text" class="territory-input" id="bcSpec30Territory" data-category="BC" data-type="Spec30" data-zipcode-field="BCSpec30Zipcode" data-user-field="BCSpec30User">
+                                <button class="lookup-btn" onclick="openLookup('BC', 'Spec30')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="bcSpec30User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="bcSpec30Override"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SWC Panel -->
+        <div class="panel" id="swcPanel">
+            <div class="panel-header" onclick="togglePanel('swcPanel')">
+                <h2>SWC Commission Assignments</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="panel-content">
+                <table class="commission-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Territory Number</th>
+                            <th>Username</th>
+                            <th>Override</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-label">Spec1</td>
+                            <td>
+                                <input type="text" class="territory-input" id="swcSpec1Territory" data-category="SWC" data-type="Spec1" data-zipcode-field="SWCSpec1Zipcode" data-user-field="SWCSpec1User">
+                                <button class="lookup-btn" onclick="openLookup('SWC', 'Spec1')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="swcSpec1User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="swcSpec1Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Sell1</td>
+                            <td>
+                                <input type="text" class="territory-input" id="swcSell1Territory" data-category="SWC" data-type="Sell1" data-zipcode-field="SWCSell1Zipcode" data-user-field="SWCSell1User">
+                                <button class="lookup-btn" onclick="openLookup('SWC', 'Sell1')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="swcSell1User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="swcSell1Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Dest1</td>
+                            <td>
+                                <input type="text" class="territory-input" id="swcDestTerritory" data-category="SWC" data-type="Dest" data-zipcode-field="SWCDest1Zipcode" data-user-field="SWCDestUser">
+                                <button class="lookup-btn" onclick="openLookup('SWC', 'Dest')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="swcDestUser"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="swcDestOverride"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Spec2</td>
+                            <td>
+                                <input type="text" class="territory-input" id="swcSpec2Territory" data-category="SWC" data-type="Spec2" data-zipcode-field="SWCSpec2Zipcode" data-user-field="SWCSpec2User">
+                                <button class="lookup-btn" onclick="openLookup('SWC', 'Spec2')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="swcSpec2User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="swcSpec2Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Sell2</td>
+                            <td>
+                                <input type="text" class="territory-input" id="swcSell2Territory" data-category="SWC" data-type="Sell2" data-zipcode-field="SWCSell2Zipcode" data-user-field="SWCSell2User">
+                                <button class="lookup-btn" onclick="openLookup('SWC', 'Sell2')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="swcSell2User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="swcSell2Override"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Spec 30%</td>
+                            <td>
+                                <input type="text" class="territory-input" id="swcSpec30Territory" data-category="SWC" data-type="Spec30" data-zipcode-field="SWCSpec30Zipcode" data-user-field="SWCSpec30User">
+                                <button class="lookup-btn" onclick="openLookup('SWC', 'Spec30')">🔍</button>
+                            </td>
+                            <td><span class="username-display" id="swcSpec30User"></span></td>
+                            <td><input type="checkbox" class="override-checkbox" id="swcSpec30Override"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="save-btn" onclick="saveCommissionData()">Save Commission Data</button>
+            <button class="audit-btn" onclick="openAuditTrail()">View Audit Trail</button>
+        </div>
+    </div>
+
+    <!-- Lookup Modal -->
+    <div id="lookupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Search ZIP Code Records</h2>
+                <span class="close" onclick="closeLookup()">&times;</span>
+            </div>
+            <div id="lookupContent">
+                <table id="lookupTable" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Territory</th>
+                            <th>ZIP Code</th>
+                            <th>User Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lookupTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audit Trail Modal -->
+    <div id="auditModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Commission Audit Trail</h2>
+                <span class="close" onclick="closeAuditTrail()">&times;</span>
+            </div>
+            <div id="auditContent">
+                <table class="audit-table">
+                    <thead>
+                        <tr>
+                            <th>Changed By</th>
+                            <th>Change Date</th>
+                            <th>Field Name</th>
+                            <th>Old Territory</th>
+                            <th>Old User</th>
+                            <th>New Territory</th>
+                            <th>New User</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="SalesCommissionScript.js"></script>
+</body>
+</html>

@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    This is a reference XML showing the structure of entities needed.
+    Use this as a guide when creating entities in Dynamics 365.
+
+    IMPORTANT: This is NOT a direct import file.
+    Use the Deployment Guide for step-by-step entity creation instructions.
+-->
+<EntityDefinitions>
+
+    <!-- 1. ZIP Code Entity -->
+    <Entity>
+        <LogicalName>new_zipcode</LogicalName>
+        <DisplayName>ZIP Code</DisplayName>
+        <PluralName>ZIP Codes</PluralName>
+        <OwnershipType>Organization</OwnershipType>
+
+        <Attributes>
+            <Attribute>
+                <LogicalName>new_zipcodeid</LogicalName>
+                <DisplayName>ZIP Code ID</DisplayName>
+                <Type>uniqueidentifier</Type>
+                <IsPrimaryId>true</IsPrimaryId>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>new_name</LogicalName>
+                <DisplayName>Name</DisplayName>
+                <Type>string</Type>
+                <MaxLength>100</MaxLength>
+                <IsPrimaryName>true</IsPrimaryName>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>new_zipcode</LogicalName>
+                <DisplayName>ZIP Code</DisplayName>
+                <Type>string</Type>
+                <MaxLength>100</MaxLength>
+                <Description>ZIP code value</Description>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>new_territory</LogicalName>
+                <DisplayName>Territory</DisplayName>
+                <Type>string</Type>
+                <MaxLength>50</MaxLength>
+                <Description>Territory number</Description>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>new_category</LogicalName>
+                <DisplayName>Category</DisplayName>
+                <Type>picklist</Type>
+                <OptionSet>
+                    <Option value="1" label="SE"/>
+                    <Option value="2" label="BC"/>
+                    <Option value="3" label="SWC"/>
+                </OptionSet>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>new_userid</LogicalName>
+                <DisplayName>User</DisplayName>
+                <Type>lookup</Type>
+                <Target>systemuser</Target>
+                <Description>Associated system user</Description>
+            </Attribute>
+        </Attributes>
+    </Entity>
+
+    <!-- 2. Sales Commission Entity -->
+    <Entity>
+        <LogicalName>crmgp_salescommission</LogicalName>
+        <DisplayName>Sales Commission</DisplayName>
+        <PluralName>Sales Commissions</PluralName>
+        <OwnershipType>Organization</OwnershipType>
+
+        <Attributes>
+            <Attribute>
+                <LogicalName>crmgp_salescommissionid</LogicalName>
+                <DisplayName>Sales Commission ID</DisplayName>
+                <Type>uniqueidentifier</Type>
+                <IsPrimaryId>true</IsPrimaryId>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_name</LogicalName>
+                <DisplayName>Name</DisplayName>
+                <Type>string</Type>
+                <MaxLength>100</MaxLength>
+                <IsPrimaryName>true</IsPrimaryName>
+            </Attribute>
+
+            <!-- Sales Order Lookup -->
+            <Attribute>
+                <LogicalName>crmgp_salesorder</LogicalName>
+                <DisplayName>Sales Order</DisplayName>
+                <Type>lookup</Type>
+                <Target>salesorder</Target>
+            </Attribute>
+
+            <!-- SE Category Fields -->
+            <Attribute>
+                <LogicalName>crmgp_sespec1zipcode</LogicalName>
+                <DisplayName>SE Spec1 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sesell1zipcode</LogicalName>
+                <DisplayName>SE Sell1 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sedestzipcode</LogicalName>
+                <DisplayName>SE Dest Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sespec2zipcode</LogicalName>
+                <DisplayName>SE Spec2 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sesell2zipcode</LogicalName>
+                <DisplayName>SE Sell2 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sespec30zipcode</LogicalName>
+                <DisplayName>SE Spec30 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <!-- SE Override Fields -->
+            <Attribute>
+                <LogicalName>crmgp_sespec1override</LogicalName>
+                <DisplayName>SE Spec1 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sesell1override</LogicalName>
+                <DisplayName>SE Sell1 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sedestoverride</LogicalName>
+                <DisplayName>SE Dest Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sespec2override</LogicalName>
+                <DisplayName>SE Spec2 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sesell2override</LogicalName>
+                <DisplayName>SE Sell2 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_sespec30override</LogicalName>
+                <DisplayName>SE Spec30 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <!-- BC Category Fields -->
+            <Attribute>
+                <LogicalName>crmgp_bcspec1zipcode</LogicalName>
+                <DisplayName>BC Spec1 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcsell1zipcode</LogicalName>
+                <DisplayName>BC Sell1 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcdest1zipcode</LogicalName>
+                <DisplayName>BC Dest1 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcspec2zipcode</LogicalName>
+                <DisplayName>BC Spec2 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcsell2zipcode</LogicalName>
+                <DisplayName>BC Sell2 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcspec30zipcode</LogicalName>
+                <DisplayName>BC Spec30 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <!-- BC Override Fields -->
+            <Attribute>
+                <LogicalName>crmgp_bcspec1override</LogicalName>
+                <DisplayName>BC Spec1 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcsell1override</LogicalName>
+                <DisplayName>BC Sell1 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcdestoverride</LogicalName>
+                <DisplayName>BC Dest Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcspec2override</LogicalName>
+                <DisplayName>BC Spec2 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcsell2override</LogicalName>
+                <DisplayName>BC Sell2 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_bcspec30override</LogicalName>
+                <DisplayName>BC Spec30 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <!-- SWC Category Fields -->
+            <Attribute>
+                <LogicalName>crmgp_swcspec1zipcode</LogicalName>
+                <DisplayName>SWC Spec1 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcsell1zipcode</LogicalName>
+                <DisplayName>SWC Sell1 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcdest1zipcode</LogicalName>
+                <DisplayName>SWC Dest1 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcspec2zipcode</LogicalName>
+                <DisplayName>SWC Spec2 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcsell2zipcode</LogicalName>
+                <DisplayName>SWC Sell2 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcspec30zipcode</LogicalName>
+                <DisplayName>SWC Spec30 Zipcode</DisplayName>
+                <Type>lookup</Type>
+                <Target>new_zipcode</Target>
+            </Attribute>
+
+            <!-- SWC Override Fields -->
+            <Attribute>
+                <LogicalName>crmgp_swcspec1override</LogicalName>
+                <DisplayName>SWC Spec1 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcsell1override</LogicalName>
+                <DisplayName>SWC Sell1 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcdestoverride</LogicalName>
+                <DisplayName>SWC Dest Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcspec2override</LogicalName>
+                <DisplayName>SWC Spec2 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcsell2override</LogicalName>
+                <DisplayName>SWC Sell2 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_swcspec30override</LogicalName>
+                <DisplayName>SWC Spec30 Override</DisplayName>
+                <Type>boolean</Type>
+            </Attribute>
+        </Attributes>
+    </Entity>
+
+    <!-- 3. Sales Commission Audit Trail Entity -->
+    <Entity>
+        <LogicalName>crmgp_salescommission_audit_trail</LogicalName>
+        <DisplayName>Sales Commission Audit Trail</DisplayName>
+        <PluralName>Sales Commission Audit Trails</PluralName>
+        <OwnershipType>Organization</OwnershipType>
+
+        <Attributes>
+            <Attribute>
+                <LogicalName>crmgp_salescommission_audit_trailid</LogicalName>
+                <DisplayName>Audit Trail ID</DisplayName>
+                <Type>uniqueidentifier</Type>
+                <IsPrimaryId>true</IsPrimaryId>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_name</LogicalName>
+                <DisplayName>Name</DisplayName>
+                <Type>string</Type>
+                <MaxLength>100</MaxLength>
+                <IsPrimaryName>true</IsPrimaryName>
+                <AutoNumberFormat>AUDIT-{SEQNUM:5}</AutoNumberFormat>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_salesorder</LogicalName>
+                <DisplayName>Sales Order</DisplayName>
+                <Type>lookup</Type>
+                <Target>salesorder</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_changedby</LogicalName>
+                <DisplayName>Changed By</DisplayName>
+                <Type>lookup</Type>
+                <Target>systemuser</Target>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_changedate</LogicalName>
+                <DisplayName>Change Date</DisplayName>
+                <Type>datetime</Type>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_fieldname</LogicalName>
+                <DisplayName>Field Name</DisplayName>
+                <Type>string</Type>
+                <MaxLength>100</MaxLength>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_oldterritory</LogicalName>
+                <DisplayName>Old Territory</DisplayName>
+                <Type>string</Type>
+                <MaxLength>50</MaxLength>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_olduser</LogicalName>
+                <DisplayName>Old User</DisplayName>
+                <Type>string</Type>
+                <MaxLength>200</MaxLength>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_newterritory</LogicalName>
+                <DisplayName>New Territory</DisplayName>
+                <Type>string</Type>
+                <MaxLength>50</MaxLength>
+            </Attribute>
+
+            <Attribute>
+                <LogicalName>crmgp_newuser</LogicalName>
+                <DisplayName>New User</DisplayName>
+                <Type>string</Type>
+                <MaxLength>200</MaxLength>
+            </Attribute>
+        </Attributes>
+    </Entity>
+
+</EntityDefinitions>
