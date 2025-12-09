@@ -1,0 +1,3103 @@
+﻿<html>
+
+<head>
+</head>
+
+<body onload="Advic.MeetingMinutes.onLoad()">
+
+
+    <meta charset="utf-8">
+    <title>Meeting Minutes Offline App</title>
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="select222.css">
+    <script src="../js/jqueryv3.5.1.js"></script>
+    <script src="../js/jqueryv3.4.1.js"></script>
+    <script src="../js/jqueryv5.1.3.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" href="../css/summernote.css">
+    <script src="../js/summernote.js"></script>
+
+
+    <style>
+        #deptLable,
+        #rNumLable,
+        #rNameLable,
+        #jsnLable,
+        #otherLable,
+        #nomenclatureLable,
+        #oprLable,
+        #catcodeLable,
+        #requestedByLable,
+        #qtyLable,
+        #priceLable,
+        #remarkLable {
+            color: red;
+            display: none;
+            font-size: smaller;
+        }
+
+        body {
+            overflow-wrap: break-word;
+            overflow: hidden;
+        }
+
+        .tableFixHead {
+            margin-top: 62px;
+            overflow-y: auto;
+        }
+
+            .tableFixHead thead th {
+                position: sticky;
+                top: 0px;
+                z-index: 1;
+            }
+
+        tbody {
+            display: block;
+            overflow-y: auto;
+            height: 100% !important;
+            scrollbar-width: thin;
+        }
+
+        /* .singleSelect2 {
+            width: 66px;
+        }*/
+
+        .select2-container--open .select2-dropdown--below {
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 66px;
+        }
+
+        .select2-container--default .select2-results > .select2-results__options::-webkit-scrollbar {
+            display: none;
+        }
+
+        .select2-container--default .select2-results > .select2-results__options {
+            max-height: 200px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            font-weight: 400;
+        }
+
+        .select2 select2-container select2-container--default select2-container--below select2-container--focus {
+            width: 66px;
+            margin-left: -42px;
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid;
+            border-color: inherit;
+            overflow: hidden;
+            width: 100%;
+            height: 32px;
+        }
+
+        .select2-selection__choice {
+            background-color: #e5e0e0 !important;
+            color: rgb(29, 28, 28) !important;
+            overflow: hidden;
+            align-items: center !important;
+        }
+
+        .select2-selection__choice__remove {
+            color: rgb(29, 28, 28) !important;
+        }
+
+        .select2-container .select2-search--inline .select2-search__field {
+            box-sizing: border-box;
+            border: none;
+            font-size: 100%;
+            margin-left: 5px;
+            padding: 0
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow b {
+            border-color: #888 transparent transparent transparent;
+            border-style: solid;
+            border-width: 5px 4px 0 4px;
+            height: 0;
+            left: 50%;
+            margin-left: -4px;
+            margin-top: -2px;
+            position: absolute;
+            top: 64%;
+        }
+
+        tr {
+            width: 100%;
+            display: table;
+            table-layout: fixed;
+        }
+
+        .ddlheader,
+        .dateheader,
+        .inputheader {
+            width: 160px;
+            height: 22px;
+        }
+
+
+        .header {
+            top: 0;
+            position: fixed;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            display: flex;
+            flex-flow: column;
+            height: 96%;
+            margin-top: 94px;
+            margin-bottom: 11px;
+        }
+
+        th,
+        td {
+            padding: 8px 5px;
+        }
+
+        th {
+            background: #eee;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        thead,
+        tbody,
+        tfoot,
+        tr,
+        td,
+        th {
+            border-color: inherit;
+            border-style: solid;
+            border-width: 0px;
+            /* height: 50px; */
+        }
+
+        tbody {
+            height: 89%;
+        }
+
+        @media screen and (min-device-width: 14in) and (max-device-width: 17in) {
+            #grid-body {
+                /* overflow: auto !important;
+                position: sticky !important;  */
+                /* height: calc(100% - 50px) !important; */
+                height: 88% !important;
+                scrollbar-width: auto;
+            }
+        }
+
+        #rowId {
+            width: 5px;
+            display: none;
+            overflow: hidden;
+            /* Hide content that overflows the cell */
+            text-overflow: ellipsis;
+            /* Show ellipsis for text that overflows */
+            white-space: nowrap;
+        }
+
+        /* Hide the scrollbar but enable scrolling */
+        #grid-body {
+            /* scrollbar-width: none; */
+            /* Hide scrollbar for WebKit browsers */
+            -ms-overflow-style: none;
+            /* Hide scrollbar for Internet Explorer */
+        }
+
+        /* For Firefox */
+        /* #grid-body { */
+        /* overflow-y: auto; */
+        /* Enable vertical scrolling */
+        /* scrollbar-width: none; */
+        /* Hide scrollbar for Firefox */
+        /* } */
+
+        .a-btn {
+            font-weight: normal;
+            text-decoration: none;
+            color: #505050;
+            cursor: pointer;
+            margin: 0px 0px 0px 6px;
+        }
+
+        div.header .btn {
+            width: 105px;
+            font-weight: bold;
+        }
+
+        .a-btn > img,
+        a-btn1 > img {
+            height: 22px;
+            width: 22px;
+        }
+
+        select.roomNameSelect {
+            border-color: white;
+            width: 98%;
+            height: 32px;
+            font-size: 14px;
+            padding: 2px;
+            padding: -7;
+            border: 1px solid #ddd;
+        }
+
+        select.selectdepartment {
+            border-color: white;
+            width: 98%;
+            height: 32px;
+            font-size: 14px;
+            padding: 2px;
+            padding: -7;
+            border: 1px solid #ddd;
+        }
+
+        select.jsnoSelect {
+            border-color: white;
+            width: 98%;
+            height: 32px;
+            font-size: 14px;
+            padding: 4px;
+            padding: -7;
+            border: 1px solid #ddd;
+        }
+
+        select.oprSelect {
+            border-color: white;
+            width: 98%;
+            height: 32px;
+            font-size: 14px;
+            padding: 2px;
+            padding: -7;
+            border: 1px solid #ddd;
+        }
+
+        select.catcdSelect {
+            border-color: white;
+            width: 98%;
+            height: 32px;
+            font-size: 14px;
+            padding: 2px;
+            padding: -7;
+            border: 1px solid #ddd;
+        }
+
+        select.requestedBySelect {
+            border-color: white;
+            width: 98%;
+            height: 32px;
+            font-size: 14px;
+            padding: 2px;
+            padding: -7;
+            border: 1px solid #ddd;
+        }
+
+        .addnewpopupinput {
+            width: 87%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+            height: 29px;
+            margin-top: 4px;
+        }
+
+        .col-25 {
+            float: left;
+            width: 35%;
+            margin-top: 15px;
+        }
+
+        .col-75 {
+            float: left;
+            width: 65%;
+            margin-top: 7px;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        @media screen and (max-width: 600px) {
+
+            .col-25,
+            .col-75,
+            input[type=submit] {
+                width: 100%;
+                margin-top: 0;
+            }
+        }
+
+        #createDept,
+        #createRoom {
+            font-size: 13px;
+        }
+
+        .blur-background {
+            opacity: 0.1;
+            z-index: 1050;
+            position: absolute;
+            left: 0;
+            right: 0;
+            border: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+        }
+
+        div.modal-footer .btn {
+            font-weight: bold;
+        }
+
+        .rich-Editer {
+            width: 635px !important;
+            right: 70px;
+        }
+
+        .txtNom {
+            width: 100%;
+        }
+
+        .txtQty {
+            width: 100%;
+        }
+
+        .txtRemark {
+            width: 100%;
+        }
+
+        .txtPrice {
+            width: 100%;
+        }
+
+        .text-center {
+            text-align: center !important;
+            margin-left: 16px;
+        }
+
+        .sort-symbol {
+            font-size: 0.75em;
+            color: #666;
+            margin-left: 4px;
+        }
+
+        #pagination {
+            text-align: right;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+            #pagination button {
+                background-color: #0078d4;
+                color: white;
+                border: none;
+                padding: 6px 12px;
+                margin: 0 5px;
+                cursor: pointer;
+                border-radius: 4px;
+                font-size: 13px;
+            }
+
+                #pagination button[disabled] {
+                    background-color: #cccccc;
+                    cursor: not-allowed;
+                }
+
+        .table-container {
+            height: 100%;
+            max-height: 79vh;
+        }
+    </style>
+
+    <div class="header">
+        <div class="row fixed-top position-fixed" style="margin-top: 6px;">
+            <div class="text-center" style="top: 8px;font-size: 14px;  font-weight: bold; margin-top: 5px;">
+                <span id="projectName">Project Name: </span>
+                <span id="projectValue"> </span>
+            </div>
+        </div>
+        <div class="row fixed-top position-fixed">
+            <div class="fixed-top" style="top: 41px;
+    margin-left: 7px;">
+                <span>Department</span>
+                <select class="ddlheader" id="ddlDept" onchange="Advic.MeetingMinutes.BindRoomDropdown()">
+                    <option value="-1">All Deparment</option>
+                </select>
+                <span>Room</span>
+                <select class="ddlheader" id="ddlRoom">
+                    <option value="-1">All Room</option>
+                </select>
+                <span>JSN</span>
+                <select class="ddlheader" id="ddlJsn">
+                    <option value="-1">All JSN</option>
+                </select>
+                <span>Meeting Date</span>
+                <input type="date" name="Meeting Date" class="dateheader" id="date-meet" style="
+                        width: 136px;">
+                <span>Meeting Name</span>
+                <input type="text" name="Meeting Name" id="text-meet" class="inputheader" placeholder="Meeting Name">
+                <a href="javascript:void(0)" class="a-btn" onclick="Advic.MeetingMinutes.CreateTemplate(true);">
+                    <img src="../img/refresh.png">
+                </a>
+                <button type="button" class="btn btn-outline-primary" id="btn-note" data-bs-toggle="modal"
+                        data-bs-target="#note">
+                    General Note
+                </button>
+                <button type="button" class="btn btn-outline-primary" id="btn-add" data-bs-toggle="modal"
+                        data-bs-target="#myModal" onclick="Advic.MeetingMinutes.AddNewPopup()">
+                    Add New
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="table-container">
+        <table id="myTable">
+            <thead <tr style="height: 55px;">
+                <th id="rowId" style="height: 34px;">rowId </th>
+                <th style="width: 3%;height: 17px;"> <span class="sort-symbol"></span></th>
+                <th style="width: 5%;margin-left: 29px;" onclick="Advic.MeetingMinutes.sortTable(2, this)">Rm #<span
+                        class="sort-symbol">▲</span></th>
+                <th style="width: 9%;" onclick="Advic.MeetingMinutes.sortTable(3, this)">Rm Name<span
+                        class="sort-symbol">▼</span></th>
+                <th style="width: 10%;" onclick="Advic.MeetingMinutes.sortTable(4, this)">Department <span
+                        class="sort-symbol">▼</span></th>
+                <th style="width: 6.1%;" onclick="Advic.MeetingMinutes.sortTable(5, this)">JSN <span
+                        class="sort-symbol">▼</span></th>
+                <th style="width: 5.5%;" onclick="Advic.MeetingMinutes.sortTable(6, this)">Other <span
+                        class="sort-symbol">▼</span></th>
+                <th style="width: 19.5%;padding-left: -27px;" onclick="Advic.MeetingMinutes.sortTable(7, this)">
+                    Nomenclature <span class="sort-symbol">▼</span></th>
+                <th style="width: 5.1%;" onclick="Advic.MeetingMinutes.sortTable(8, this)">Opr <span
+                        class="sort-symbol">▼</span></th>
+                <th style="width: 5%;" onclick="Advic.MeetingMinutes.sortTable(9, this)">CatCd <span
+                        class="sort-symbol">▼</span></th>
+                <th style="width: 5%;" onclick="Advic.MeetingMinutes.sortTable(10, this)">QTY <span
+                        class="sort-symbol">▼</span></th>
+                <th style="width: 5.1%;" onclick="Advic.MeetingMinutes.sortTable(11, this)">Price <span
+                        class="sort-symbol">▼</span></th>
+                <th style="width: 6%;" onclick="Advic.MeetingMinutes.sortTable(12, this)">Request By <span
+                        class="sort-symbol">▼</span></th>
+                <th style="width:7.1%;" onclick="Advic.MeetingMinutes.sortTable(13, this)">Modified By <span
+                        class="sort-symbol">▼</span></th>
+                <th style="width: 7%;" onclick="Advic.MeetingMinutes.sortTable(14, this)">Modified On <span
+                        class="sort-symbol">▼</span></th>
+                </tr>
+            </thead>
+
+            <tbody id="grid-body">
+                <tr margin-top="9px">
+                    <td colspan="15" align="center">
+                        <div>There are no data available. </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="pagination">
+        </div>
+
+    </div>
+    <div class="modal fade" id="note" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rich-Editer">
+                <div class="modal-header">
+                    <h4 class="modal-title">General Note</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="Advic.MeetingMinutes.RemoveBlurBackdeparment('.main')"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="summernote"></div>
+                    <div class="modal-footer">
+                        <button id="save" onclick="Advic.MeetingMinutes.ClosePopup()" class="btn btn-outline-primary"
+                                data-bs-dismiss="modal">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
+                                onclick="Advic.MeetingMinutes.RemoveBlurBackdeparment('.main')">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="RoomNote" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rich-Editer">
+                <div class="modal-header">
+                    <h4 class="modal-title">Note</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="Advic.MeetingMinutes.RemoveBlurBackdeparment('.main')"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="roomNote"></div>
+                    <div class="modal-footer">
+                        <button id="save" onclick="Advic.MeetingMinutes.RoomNoteSave()" class="btn btn-outline-primary"
+                                data-bs-dismiss="modal">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
+                                onclick="Advic.MeetingMinutes.RemoveBlurBackdeparment('.main')">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade in" id="myModal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" id="AddMeetingMinuties">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLongTitle" style="font-weight: bold;">
+                        New Meeting Minutes
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="Advic.MeetingMinutes.RemoveBlurBackdeparment()">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-25">
+                                <span class="span">Department</span>
+                                <span style="color:red;"> *</span>
+                            </div>
+                            <div class="col-75">
+                                <select class="addnewpopupinput" id="ddlDepartment"
+                                        onchange="Advic.MeetingMinutes.CreateRoomSelect()"></select>
+                                <button id="createDept" class="btn btn-outline-primary" data-toggle="modal"
+                                        data-target="#deptModal">
+                                    +
+                                </button>
+                                <p id="deptLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">Room Number</span>
+                                <span style="color:red;"> *</span>
+                            </div>
+                            <div class="col-75">
+                                <select class="addnewpopupinput" id="ddlRoomnumber"
+                                        onchange="console.log('roomnumber'); Advic.MeetingMinutes.RoomNameSet('#ddlRoomnumber','#roomname')"></select>
+                                <button id="createRoom" class="btn btn-outline-primary" data-toggle="modal"
+                                        data-target="#roomModal" onclick="Advic.MeetingMinutes.OpenRoomPopup()">
+                                    +
+                                </button>
+                                <p id="rNumLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">Room Name</span>
+                                <span style="color:red;"> *</span>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" name="roomname" id="roomname" class="addnewpopupinput">
+                                <p id="rNameLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">JSN</span>
+                                <span style="color:red;"> *</span>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" name="jsno" id="jsno" class="addnewpopupinput">
+                                <p id="jsnLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">Other</span>
+                                <span style="color:red;"> </span>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" name="Other" id="other" class="addnewpopupinput">
+                                <p id="otherLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">Nomenclature</span>
+                                <span style="color:red;"> *</span>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" name="nomenclature" id="nomenclature" class="addnewpopupinput">
+                                <p id="nomenclatureLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">OPR</span>
+                                <span style="color:red;"> *</span>
+                            </div>
+                            <div class="col-75">
+                                <select class="addnewpopupinput" id="ddlopr"></select>
+                                <p id="oprLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">Cat Cd</span>
+                                <span style="color:red;"> *</span>
+                            </div>
+                            <div class="col-75">
+                                <select class="addnewpopupinput" id="ddlCatcd"></select>
+                                <p id="catcodeLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">Requested By</span>
+                                <span style="color:red;"> *</span>
+                            </div>
+                            <div class="col-75">
+                                <select class="addnewpopupinput" id="ddlRequestedby"></select>
+                                <p id="requestedByLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">Qty</span>
+                                <span style="color:red;"> *</span>
+                            </div>
+                            <div class="col-75">
+                                <input type="number" name="qty" id="qty" class="addnewpopupinput">
+                                <p id="qtyLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">Price</span>
+                                <span style="color:red;"> </span>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" name="price" id="price" class="addnewpopupinput"
+                                       pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency">
+                                <p id="priceLable"></p>
+                            </div>
+                            <br>
+                            <div class="col-25">
+                                <span class="span">Note</span>
+                                <span style="color:red;"> </span>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" name="Remarks" id="remarks" class="addnewpopupinput">
+                                <p id="remarkLable"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="position: relative;border: none;left: 5px;">
+                    <button id="save" onclick="Advic.MeetingMinutes.CreateMeetingMinutes()"
+                            class="addnewSave btn btn-outline-primary" data-dismiss="modal">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
+                            onclick="Advic.MeetingMinutes.RemoveBlurBackdeparment()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal in" id="deptModal" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" style="font-weight: bold;">New Department</h3>
+                    <button type="button" class="btn-close" data-dismiss="modal"
+                            onclick="Advic.MeetingMinutes.RemoveBlurBack()">
+                    </button>
+
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-25">
+                                <span>Department Name</span>
+                            </div>
+                            <div class="col-75">
+                                <select class="addnewpopupinput" id="newddldept"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="position: relative;border: none;left: 5px;">
+                    <button id="save" onclick="Advic.MeetingMinutes.CreateDept()" class="btn btn-outline-primary"
+                            data-dismiss="modal">
+                        Save
+                    </button><button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                                     onclick="Advic.MeetingMinutes.RemoveBlurBack()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal in" id="roomModal" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" style="font-weight: bold;">New Room</h3>
+                    <button type="button" class="btn-close" data-dismiss="modal"
+                            onclick="Advic.MeetingMinutes.RemoveBlurBack()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-25">
+                                <span class="span">Department</span>
+                            </div>
+                            <div class="col-75">
+                                <select class="addnewpopupinput" id="ddlDepartmentRoom"
+                                        onchange="Advic.MeetingMinutes.CreateRoomSelect()"></select>
+                            </div>
+                            <div class="col-25">
+                                <span class="span">Room Number</span>
+                            </div>
+                            <div class="col-75">
+                                <select type="text" name="" value="" id="ddlroomnumber" class="addnewpopupinput"
+                                        onchange="Advic.MeetingMinutes.RoomNameSet('#ddlroomnumber','#roomName')"></select>
+                            </div>
+                            <div class="col-25">
+                                <span>Rm name</span>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" name="" value="" id="roomName" class="addnewpopupinput">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="position: relative;border: none;left: 5px;">
+                    <button id="save" onclick="Advic.MeetingMinutes.CreateRoom()" class="btn btn-outline-primary"
+                            data-dismiss="modal">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                            onclick="Advic.MeetingMinutes.RemoveBlurBack()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var projectId;
+        if (typeof Advic === 'undefined') { Advic = { __namespace: true } }
+        let currentPage = 1;
+        const pageSize = 100;  // change if needed
+        let cachedData = [];  // will store full dataset
+        Advic.MeetingMinutes = (function () {
+            var clientContext = window.parent.Xrm.Utility.getGlobalContext().client;
+            console.log("Started");
+            var xrmWebAPI;
+            if (clientContext.getClientState() === "Offline")
+                xrmWebAPI = window.parent.Xrm.WebApi.offline;
+            else
+                xrmWebAPI = window.parent.Xrm.WebApi.online;
+            var guid = window.parent.Xrm.Page.data.entity.getId().replace("{", "").replace("}", "");
+            var gridBody = document.getElementById('grid-body');
+            var roomnoteid;
+            var departments;
+
+
+            let FinalData = [];
+            const C_CatCD = {
+                '1': 'A',
+                '2': 'B',
+                '3': 'C',
+                '4': 'D',
+                '5': 'R',
+                '6': 'E',
+                '7': 'F'
+            }
+            let C_Data_Type = { String: 1, Number: 2, Money: 3, Choice: 4, YesNo: 5, Lookup: 6 }
+            const C_AttributeName = { OPR: 'opr', Price: 'price', Qty: 'qty', RxRId: 'roombyroomid', JSNName: 'jsno', CatCode: 'catcd', Nomencluture: 'nomencluture', JSNOther: 'suffix', RoomName: "roomname", Remark: "remarks", Department: "department", RoomNumber: "roommnumber", note: "generalnote" }
+
+            //const C_OPR = {
+            //    '1': 'EQP',
+            //    '2': 'BUMED',
+            //    '3': 'DHA',
+            //    '4': 'FRN',
+            //    '5': 'GC',
+            //    '6': 'LVS',
+            //    '7': 'MDG',
+            //    '8': 'MED',
+            //    '9': 'OTR'
+            //}
+
+            const C_OPR = {
+                '1': 'ART',
+                '2': 'BUMED',
+                '3': 'DHA',
+                '4': 'EQP',
+                '5': 'FRN',
+                '5': 'GC',
+                '6': 'LVS',
+                '7': 'MDG',
+                '9': 'OTR'
+            }
+
+            const C_Requested = {
+                '1': "End User",
+                '2': 'Group Decision'
+            }
+
+            const C_changeType = {
+                iota_roomnumber: 1,
+                iota_roomname: 2,
+                iota_department: 3,
+                iota_jsno: 4,
+                iota_nomencluture: 5,
+                iota_opr: 6,
+                iota_catcd: 7,
+                iota_qty: 8,
+                iota_price: 9,
+                iota_remarks: 10,
+                iota_requestedby: 11,
+                departmentNoteChange: 12,
+                projectNoteChange: 13,
+                roomNoteChange: 14,
+                iota_suffix: 15,
+                iota_new_jsn: 16
+            }
+            const C_ChangeTypeString = {
+                iota_roomnumber: 'Room Number Change',
+                iota_roomname: 'Room Name Change',
+                iota_department: 'Department Change',
+                iota_jsno: 'JSNO Change',
+                iota_nomencluture: 'Nomenclature Change',
+                iota_opr: 'OPR Change',
+                iota_catcd: 'Cat Code Change',
+                iota_qty: 'Quantity Change',
+                iota_price: 'Price Change',
+                iota_remarks: 'Remark Change',
+                iota_requestedby: 'Requested By Change',
+                departmentNoteChange: 'Department Note Change',
+                projectNoteChange: 'Project Note Change',
+                roomNoteChange: 'Room Note Change',
+                iota_suffix: 'JSN Other Change',
+                iota_new_jsn: 'New JSN'
+            }
+            $('#date-meet').change(function () {
+                let entity = {};
+                entity.iota_meetingdate = $('#date-meet').val().toString();
+                //window.parent.Xrm.Utility.alertDialog("Date: " + entity.iota_meetingdate + "\nGUID: " + guid);
+                xrmWebAPI.updateRecord("iota_meetingminutesconfig", guid, entity).then(function success(result) {
+                    var updatedEntityId = result.id;
+                }, function (error) {
+                    window.parent.Xrm.Utility.alertDialog(error.message);
+                });
+            });
+
+            $('#text-meet').change(function () {
+                let entity = {};
+                entity.iota_meetingname = $('#text-meet').val();
+                xrmWebAPI.updateRecord("iota_meetingminutesconfig", guid, entity).then(function success(result) {
+                    var updatedEntityId = result.id;
+                }, function (error) {
+                    window.parent.Xrm.Utility.alertDialog(error.message);
+                });
+            });
+            $("#jsno").focusout(async function () {
+                debugger;
+                Advic.MeetingMinutes.PrePopulateFieldValues();
+
+            });
+            $("#other").focusout(async function () {
+                debugger;
+                Advic.MeetingMinutes.PrePopulateFieldValues();
+
+            });
+
+            var sortDirection = 'asc';
+
+            function _sortTable(colIndex, thElement) {
+                const table = document.getElementById("myTable");
+                const tbody = table.tBodies[0];
+                const rows = Array.from(tbody.rows);
+
+                // Determine direction
+                if (this.currentSortColumn === colIndex) {
+                    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    this.sortDirection = 'asc';
+                }
+                this.currentSortColumn = colIndex;
+
+                // Sorting logic
+                rows.sort((a, b) => {
+                    const getValue = (row) => {
+                        const cell = row.cells[colIndex];
+                        const input = cell.querySelector("input, select");
+                        return input ? input.value.toLowerCase() : cell.textContent.toLowerCase();
+                    };
+
+                    const valA = getValue(a);
+                    const valB = getValue(b);
+                    return (valA < valB ? -1 : valA > valB ? 1 : 0) * (this.sortDirection === 'asc' ? 1 : -1);
+                });
+
+                // Re-append sorted rows
+                const fragment = document.createDocumentFragment();
+                rows.forEach(row => fragment.appendChild(row));
+                tbody.appendChild(fragment);
+
+                // ✅ Only update the clicked column's arrow
+                const sortSpan = thElement.querySelector(".sort-symbol");
+                if (sortSpan) {
+                    sortSpan.textContent = this.sortDirection === 'asc' ? '▲' : '▼';
+                }
+            }
+
+            var _onload = async function () {
+                debugger;
+                console.log("OnLoad Started");
+                try {
+                    window.parent.Xrm.Page.ui.headerSection.setBodyVisible(false);
+                    window.parent.Xrm.Page.ui.headerSection.setCommandBarVisible(false);
+                    let result = await xrmWebAPI.retrieveRecord("iota_meetingminutesconfig", guid, "?$select=_iota_project_value,iota_meetingdate,iota_meetingname");
+                    if (result) {
+                        projectId = result["_iota_project_value"];
+                        let meetdate = result["iota_meetingdate"];
+                        let meetname = result["iota_meetingname"];
+                        let projectName = result["_iota_project_value@OData.Community.Display.V1.FormattedValue"];
+
+                        var updatedFields = {};
+                        if (projectName != "" || projectName != null) {
+
+
+                            updatedFields = {
+                                "iota_name": projectName
+                            };
+                        } else {
+                            updatedFields = {
+                                "iota_name": ""
+                            };
+                        }
+
+
+                        await xrmWebAPI.updateRecord("iota_meetingminutesconfig", guid, updatedFields);
+
+
+                        if (meetdate != "") {
+                            $('#date-meet').val(meetdate)
+                        }
+                        if (meetname != "") {
+                            $('#text-meet').val(meetname);
+                        }
+                        $("#projectValue").text(projectName);
+
+                        console.log(projectId);
+                        _bindDeptDropdown(projectId);
+                        _bindRoomDropdown();
+                        _bindJsnDropdown(projectId);
+
+                        const theadCount = document.querySelectorAll('#myTable thead th').length;
+                        const row = document.querySelector('#myTable tbody tr');
+                        const tdCount = row ? row.querySelectorAll('td').length : 0;
+
+                        console.log('TH Count:', theadCount, 'TD Count in first row:', tdCount);
+                    }
+
+                }
+                catch (e) {
+
+                    window.parent.Xrm.Utility.alertDialog("Currently you are working on online, Please select offline mode.");
+                }
+                console.log("OnLoad Finished");
+            };
+
+            var _createMeetingMinutes = async function () {
+                debugger;
+                try {
+
+                    let projectId = window.parent.Xrm.Page.getAttribute("iota_project").getValue()[0].id;
+                    let replacePorjectId = projectId.replace("{", "").replace("}", "").toLowerCase();
+                    guid = guid.toLowerCase();
+                    replacePorjectId = replacePorjectId.toLowerCase();
+                    let price = $('#price').val().replace(/[$,]/g, '');
+                    let entity = {};
+                    entity["iota_name"] = ($('#roomname').val() ?? $('#roomname').val()) + "-" + ($('#jsno').val() ?? $('#jsno').val()) + "-" + ($('#other').val() ?? $('#other').val());
+                    entity["iota_department@odata.bind"] = "/iota_departments(" + $('#ddlDepartment').val() + ")";
+                    entity["iota_roomnumber@odata.bind"] = "/iota_rooms(" + $('#ddlRoomnumber').val() + ")";
+                    entity.iota_roomname = $('#roomname').val();
+                    entity.iota_jsno = $('#jsno').val();
+                    entity.iota_suffix = $('#other').val();
+                    entity.iota_nomencluture = $('#nomenclature').val();
+                    entity.iota_catcd = $('#ddlCatcd').val() ? parseInt($('#ddlCatcd').val()) : "";
+                    entity.iota_opr = $('#ddlopr').val() ? parseInt($('#ddlopr').val()) : "";
+                    entity.iota_requestedby = $('#ddlRequestedby').val() ? parseInt($('#ddlRequestedby').val().toLowerCase()) : "";
+                    entity.iota_qty = $('#qty').val() ? parseInt($('#qty').val()) : "";
+                    entity["iota_ProjectConfig@odata.bind"] = "/iota_meetingminutesconfigs(" + guid.toLowerCase() + ")";
+                    entity["iota_project@odata.bind"] = "/iota_projects(" + replacePorjectId.toLowerCase() + ")";
+                    entity.iota_price = Number(parseFloat(price).toFixed(4));
+                    entity.iota_remarks = $('#remarks').val();
+                    // entity.iota_meetingdate = new Date($("#date-meet").val());
+                    // entity.iota_meetingname = $('#text-meet').val();
+                    entity.iota_requestedchanges = "Change Type New JSN";
+
+                    let ifValid = validationOnNewRecordSave(entity);
+                    _removeBlurBackdeparment();
+                    if (ifValid == true) {
+                        parent.Xrm.Utility.showProgressIndicator("Creating new Meeting Minute...");
+                        window.parent.Xrm.WebApi.createRecord("iota_meetingminutes", entity).then(function success(result) {
+
+                            var newEntityId = result.id;
+                            var newvalue = JSON.stringify(entity);
+                            createMeetingMinutesNote("", newvalue, "new_jsn", newEntityId);
+                            $('#AddMeetingMinuties').modal('hide');
+                            $(".main").removeClass("blur-background");
+                            $("#tablewrapdata").removeClass("blur-background");
+                            _createTemplate();
+                            parent.Xrm.Utility.closeProgressIndicator();
+                            //window.parent.Xrm.Navigation.openAlertDialog({ text: "New Meeting Minute is created" + newEntityId });
+                            var alertStrings = { confirmButtonLabel: "OK", text: "New Meeting Minute is created", title: "New Meeting Minute" };
+                            var alertOptions = { height: 120, width: 260 };
+                            window.parent.Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
+                                function (success) {
+                                    $('#myModal').modal('hide');
+                                },
+                                function (error) {
+                                    parent.Xrm.Utility.closeProgressIndicator();
+                                    console.log(error.message);
+                                }
+                            );
+
+                        }, function (error) {
+                            window.parent.Xrm.Utility.alertDialog(error.message);
+
+                            $(".main").removeClass("blur-background");
+                            $("#tablewrapdata").removeClass("blur-background");
+
+                        });
+                        $("input[type=text], textarea,input[type=number]").val("");
+                    }
+                }
+
+                catch (e) {
+                    //parent.Xrm.Utility.closeProgressIndicator();
+                    console.log("Error Inside _createMeetingMinutes :" + e.message);
+                }
+            }
+
+            function validationOnNewRecordSave(newRecValue) {
+                debugger;
+                let valid = true;
+                let dept = document.getElementById("ddlDepartment").value;
+                let roomnum = document.getElementById("ddlRoomnumber").value;
+                $('#deptLable').hide();
+                $('#rNumLable').hide();
+                $('#jsnLable').hide();
+                $('#nomenclatureLable').hide();
+                $('#priceLable').hide();
+                $('#qtyLable').hide();
+                $('#oprLable').hide();
+                $('#catcodeLable').hide();
+                $('#otherLable').hide();
+                $('#rNameLable').hide();
+                $('#remarkLable').hide();
+
+                if (dept == "") {
+                    $('#deptLable').show();
+                    $('#deptLable').text("Department is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+                if (roomnum == "") {
+                    $('#rNumLable').show();
+                    $('#rNumLable').text("RoomNumber is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+                if (newRecValue.iota_jsno == "") {
+                    $('#jsnLable').show();
+                    $('#jsnLable').text("JSN is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+                if (newRecValue.iota_nomencluture == "") {
+                    $('#nomenclatureLable').show();
+                    $('#nomenclatureLable').text("Nomenclature is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+                if (isNaN(newRecValue.iota_price)) {
+                    $('#priceLable').show();
+                    //$('#priceLable').text("Price is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+                if (newRecValue.iota_qty == "") {
+                    $('#qtyLable').show();
+                    $('#qtyLable').text("Quantity is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+                //if (newRecValue.iota_suffix == "") {
+                //    $('#otherLable').show();
+                //    $('#otherLable').text("JSN other is required.!");
+                //    if (valid) {
+                //        valid = false;
+                //    }
+                //}
+                if (newRecValue.iota_roomname == "") {
+                    $('#rNameLable').show();
+                    $('#rNameLable').text("RoomName is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+
+                if (newRecValue.iota_opr == "") {
+                    $('#oprLable').show();
+                    $('#oprLable').text("OPR is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+                if (newRecValue.iota_catcd == "") {
+                    $('#catcodeLable').show();
+                    $('#catcodeLable').text("Cat Cd is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+                if (newRecValue.iota_requestedby == "") {
+                    $('#requestedByLable').show();
+                    $('#requestedByLable').text("Requested By is required.!");
+                    if (valid) {
+                        valid = false;
+                    }
+                }
+                return valid;
+            }
+
+            function createSelectOption(options, select) {
+                for (let key in options) {
+                    if (options.hasOwnProperty(key)) {
+                        const option = document.createElement('option');
+                        option.value = key;
+                        option.textContent = options[key];
+                        select.append(option);
+                    }
+                }
+            }
+
+            function setDropDownVal(options, optValue, fieldName) {
+                for (let key in options) {
+                    if (options.hasOwnProperty(key)) {
+                        var val = options[key];
+                        if (val === optValue)
+                            //$(fieldName + 'option[value="' + key + '"]').attr('selected', 'selected');
+                            $('#' + fieldName + ' option[value="' + key + '"]').prop('selected', true);
+                        //$('#mySelect option[value="optionValue"]').prop('selected', true);
+                    }
+                }
+
+            }
+            
+
+
+            var _prePopulateFieldValues = async function () {
+                var jsonName = $("#jsno").val();
+                var other = $("#other").val();
+                var jsnFilter = jsonName && other ? "iota_name eq '" + jsonName + "'and iota_suffix eq '" + other + "'" : "iota_name eq '" + jsonName + "'";
+
+                var result = await xrmWebAPI.retrieveMultipleRecords("iota_jsn", "?$select=_iota_acquisitionid_value,_iota_opr_value,iota_nomenclature,iota_romprice&$filter=" + jsnFilter + " and _iota_projectid_value eq " + projectId + "");
+                if (result.entities.length == 0) {
+                    result = await xrmWebAPI.retrieveMultipleRecords(
+                        "iota_jsn",
+                        "?$select=_iota_acquisitionid_value,_iota_opr_value,iota_nomenclature,iota_romprice&$filter=" +
+                        jsnFilter +
+                        " and _iota_projectid_value eq '" + "705f5139-1cfa-ed11-8849-00224824973c" + "'"
+                    );
+
+                    if (jsonName != "" && result.entities.length == 0) {
+                        var jsnFilter = "iota_name eq '" + jsonName + "'";
+
+                        result = await xrmWebAPI.retrieveMultipleRecords(
+                            "iota_jsn",
+                            "?$select=_iota_acquisitionid_value,_iota_opr_value,iota_nomenclature,iota_romprice&$filter=" +
+                            jsnFilter +
+                            " and _iota_projectid_value eq '" + "705f5139-1cfa-ed11-8849-00224824973c" + "'"
+                        );
+                    }
+                }
+
+                if (result && result.entities.length > 0) {
+                    var oprVal = result.entities[0]['_iota_opr_value'] ? result.entities[0]['_iota_opr_value@OData.Community.Display.V1.FormattedValue'] : null;
+                    var catCdVal = result.entities[0]['_iota_acquisitionid_value'] ? result.entities[0]['_iota_acquisitionid_value@OData.Community.Display.V1.FormattedValue'] : null;
+                    var nomVal = result.entities[0]['iota_nomenclature'] ? result.entities[0]['iota_nomenclature'] : null;
+                    var priceVal = result.entities[0]['iota_romprice'] ? result.entities[0]['iota_romprice'] : 0;
+
+                    if (oprVal) {
+                        setDropDownVal(C_OPR, oprVal, "ddlopr");
+                        setDropDownVal(C_CatCD, catCdVal, "ddlCatcd");
+                        $("#nomenclature").val(nomVal);
+                        $("#price").val(priceVal);
+
+                        //disable fields
+                        // $("#ddlopr").prop('disabled', true);
+                        // $("#ddlCatcd").prop('disabled', true);
+                        // $("#nomenclature").prop('disabled', true);
+                        //$("#price").prop('disabled', true);
+
+                    }
+                }
+                else {
+                    $("#ddlCatcd").val(null);
+                    $("#ddlopr").val(null);
+                    $("#nomenclature").val(null);
+                    $("#price").val(null);
+
+                    //enable  fields
+                    // $("#ddlopr").prop('disabled', false);
+                    // $("#ddlCatcd").prop('disabled', false);
+                    // $("#nomenclature").prop('disabled', false);
+                    // $("#price").prop('disabled', false);
+
+                }
+            }
+
+            var _addNewPopup = async function () {
+                debugger;
+
+                if ($("#ddlopr").children().length == 0) {
+                    createSelectOption(C_OPR, $("#ddlopr"));
+                }
+                if ($('#ddlCatcd').children().length == 0) {
+                    createSelectOption(C_CatCD, $('#ddlCatcd'));
+                }
+                if ($("#ddlRequestedby").children().length == 0) {
+                    createSelectOption(C_Requested, $("#ddlRequestedby"));
+                }
+
+                $("#ddlDepartment").html('');
+                let departments = await _getDeptDatabyProjectId(projectId);
+                departments.forEach((item) => {
+                    $("#ddlDepartment").append($("<option></option>").attr("value", item.id).text(item.name));
+                });
+
+                var selectedDeptVal = $('#ddlDept').val();
+                if (selectedDeptVal != "-1")
+                    $('#ddlDepartment').val(selectedDeptVal);
+
+                $("#ddlRoomnumber").html('');
+                let departmentId = $("#ddlDepartment").val();
+                let lstrm = await _getRoomsDatabyDeptId(departmentId);
+                lstrm.forEach((item) => {
+                    $("#ddlRoomnumber").append($("<option></option>").attr("value", item.id).text(item.name));
+                });
+                let roomId = $("#ddlRoomnumber").val();
+                var selectedRmVal = $('#ddlRoom').val();
+                if (selectedRmVal != "-1") {
+                    roomId = $('#ddlRoomnumber').val(selectedRmVal)[0].value;
+                }
+
+                let result = await xrmWebAPI.retrieveMultipleRecords("iota_room", "?$select=iota_roomname&$filter=iota_roomid eq '" + roomId + "'");
+                if (result.entities[0] != null) {
+                    let roomName = result.entities[0]["iota_roomname"];
+                    $('#roomname').val(roomName)
+                }
+            };
+
+            var _openRoomPopup = async function () {
+                debugger;
+                $("#myModal").addClass("blur-background");
+                $("#ddlDepartmentRoom").html('');
+                let departments = await _getDeptDatabyProjectId(projectId);
+                departments.forEach((item) => {
+                    $("#ddlDepartmentRoom").append($("<option></option>").attr("value", item.id).text(item.name));
+                })
+                $('#ddlroomnumber').html('');
+
+
+                let rmList = [];
+                let fetchXml = '<fetch mapping="logical">';
+                fetchXml += '<entity name="iota_room">';
+                fetchXml += '<attribute name="iota_roomid" />';
+                fetchXml += '<attribute name="iota_name" />';
+                fetchXml += '<attribute name="iota_roomname" />';
+                fetchXml += '<attribute name="iota_roomcode" />';
+                fetchXml += '<order attribute="iota_name" descending="false" />';
+                fetchXml += '<filter type="and">';
+                fetchXml += '<condition attribute="statecode" operator="eq" value="0" />';
+                fetchXml += '<condition attribute="iota_isreserveddata" operator="in" >';
+                fetchXml += '<value>1</value>';
+                fetchXml += '</condition>';
+                fetchXml += '</filter>';
+                fetchXml += '</entity>';
+                fetchXml += '</fetch>';
+
+                let fetchXMLResult = "?fetchXml=" + fetchXml;
+                await xrmWebAPI.retrieveMultipleRecords("iota_room", fetchXMLResult).then(
+                    function success(results) {
+
+                        results.entities.forEach(room => {
+                            let x = {};
+                            x.id = room.iota_roomid;
+                            x.number = room.iota_name;
+                            x.roomname = room.iota_roomname;
+                            x.name = x.number + " (" + x.roomname + ")";
+                            rmList.push(x);
+                        });
+                    }, function (error) {
+                        debugger;
+                        window.parent.Xrm.Utility.alertDialog(error.message);
+                    });
+
+                rmList.forEach((item) => {
+                    $("#ddlroomnumber").append($("<option></option>").attr("value", item.id).text(item.name));
+                })
+
+                let roomId = $("#ddlroomnumber").val();
+                //window.parent.Xrm.Utility.alertDialog(roomId);
+                let result = await xrmWebAPI.retrieveMultipleRecords("iota_room", "?$select=iota_roomname&$filter=iota_roomid eq '" + roomId + "'");
+                if (result.entities[0] != null) {
+                    let roomName = result.entities[0]["iota_roomname"];
+                    $('#roomName').val(roomName)
+                }
+            };
+
+            var _roomNoteSave = async function () {
+                debugger;
+                $(".main").removeClass("blur-background");
+                $("#tablewrapdata").removeClass("blur-background");
+                let oldRoomNote = $("#roomNote").attr("roomNote-old");
+                let newRoomNote = $('.note-editable').text();
+                let newNote = newRoomNote;
+                // window.parent.Xrm.Utility.alertDialog(newRoomNote.innerHTML);
+
+
+                let attributeName = "generalnote";
+                let o = FinalData.find((x) => x.roombyroomid == roomnoteid);
+                o.generalNote = newNote;
+                meetingMinuteId = await createUpdateMeetingMinuteRecord(o, attributeName, newNote);
+                let entity = {};
+                entity.iota_generalnote = newNote;
+                //createMeetingMinutesNote(oldRoomNote, newRoomNote, "roomNoteChange", meetingMinuteId);
+                xrmWebAPI.updateRecord("iota_meetingminutes", meetingMinuteId, entity).then(function success(result) {
+                    var updatedEntityId = result.id;
+                }, function (error) {
+                    window.parent.Xrm.Utility.alertDialog(error.message);
+                });
+                $("#RoomNote").css('display', 'none');
+                $("#roomNote").attr("roomNote-old", $(".note-editable").html());
+
+                let removeBody = document.querySelector(".note-editable");
+                if (removeBody != null) {
+                    while (removeBody.firstChild) {
+                        removeBody.removeChild(removeBody.firstChild);
+                    }
+                }
+            };
+
+            var _removeBlurBackdeparment = function () {
+                $(".main").removeClass("blur-background");
+                $("#tablewrapdata").removeClass("blur-background");
+            }
+
+            var _removeBlurBack = function () {
+                $("#myModal").removeClass("blur-background");
+            }
+
+            var _closePopup = function () {
+                debugger;
+                $(".main").removeClass("blur-background");
+                $("#tablewrapdata").removeClass("blur-background");
+                //let generalNote = $('.note-editable').html();
+                let generalNote = $('.note-editable').children()[4];
+                let newnote = $(generalNote).nextAll();
+                let allnoteHTML = "";
+                for (let i = 0; i < newnote.length; i++) {
+                    allnoteHTML += newnote[i].innerHTML;
+                }
+
+                if (generalNote != null) {
+                    var entity = {};
+                    let oldNote = $('#summernote').attr("projectnote-old");
+                    let NewNote = allnoteHTML;
+                    entity.iota_generalnotes = allnoteHTML;
+                    xrmWebAPI.updateRecord("iota_meetingminutesconfig", guid, entity).then(function success(result) {
+                        var updatedEntityId = result.id;
+                    }, function (error) {
+                        window.parent.Xrm.Utility.alertDialog(error.message);
+                    });
+                    $('#summernote').attr("projectnote-old", allnoteHTML);
+                }
+                let removeBody = document.querySelector(".note-editable");
+                if (removeBody != null) {
+                    while (removeBody.firstChild) {
+                        removeBody.removeChild(removeBody.firstChild);
+                    }
+                }
+            };
+
+            async function getJSNdetails(o, jsno) {
+                let jsno_newvalue = jsno;
+                let suffix = o.suffix;
+
+                // Base FetchXML structure
+                let fetchXML = `
+                                    <fetch version="1.0" output-format="xml-platform" mapping="logical" no-lock="false" distinct="true">
+                                        <entity name="iota_jsn">
+                                            <attribute name="statecode" />
+                                            <attribute name="iota_name" />
+                                            <attribute name="iota_nomenclature" />
+                                            <attribute name="iota_acquisitionid" />
+                                            <attribute name="iota_projectid" />
+                                            <attribute name="iota_suffix" />
+
+                                            <attribute name="iota_romprice" />
+                                            <attribute name="iota_jsnid" />
+                                            <attribute name="iota_opr" />
+                                            <order attribute="iota_name" descending="false" />
+                                            <filter type="and">
+                                                <condition attribute="iota_jsnid" operator="not-null" />
+                                                <condition attribute="iota_name" operator="eq" value="${jsno_newvalue}" />
+                                                <condition attribute="iota_projectid" operator="eq" value="${projectId}" />
+                                                ${suffix ? `<condition attribute="iota_suffix" operator="eq" value="${suffix}" />` : `<condition attribute="iota_suffix" operator="null" />`}
+                                            </filter>
+                                        </entity>
+                                    </fetch>`;
+
+                let fetchXMLResult = "?fetchXml=" + fetchXML;
+                let results = await xrmWebAPI.retrieveMultipleRecords('iota_jsn', fetchXMLResult);
+                if (results.entities[0] != null) {
+                    const record = results.entities[0];
+                    if (record["_iota_acquisitionid_value@OData.Community.Display.V1.FormattedValue"] != "") { o.catcd = record["_iota_acquisitionid_value@OData.Community.Display.V1.FormattedValue"]; }
+                    o.nomencluture = (record.iota_nomenclature != undefined) ? record.iota_nomenclature : "";
+                    if (record["_iota_opr_value@OData.Community.Display.V1.FormattedValue"] != "") { o.opr = record["_iota_opr_value@OData.Community.Display.V1.FormattedValue"]; }
+                    if (record.iota_romprice) { o.price = record.iota_romprice; }
+                }
+
+                return o;
+            }
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            async function trackChanges(event) {
+                debugger;
+                console.log("Inside trackChanges function");
+                const me = event.target; let meetingMinuteId;
+                var globalchangechoice;
+                let attributeName = me?.closest('td')?.getAttribute("attr");
+                await sleep(100);
+
+                var selectedValue = me?.value;
+                var newVal = me?.value;
+                var meetingName = $("#text-meet").val();
+                var meetingDate = $("#date-meet").val();
+                let tr = me?.closest('tr');
+                var id = tr?.getAttribute("data-rowid");
+                let o = getChangeObjectById(id);
+                let c = getConstantFromField(attributeName);
+
+
+                let oldvalText =
+                    (attributeName == "department") ? o["departmentname"] : o[attributeName];
+                let oldVal = getKeyByValue(c, oldvalText);
+                selectedValue = me?.value
+                let newvalText = (attributeName == "department") ? me?.querySelector(`option[value="${selectedValue}"]`)?.textContent : getTextFromValue(newVal, attributeName);
+
+                if (attributeName == "suffix" || attributeName == "jsno") {
+                    selectedChangeType = await openChangeTypePopup();
+                    if (attributeName == "jsno") {
+                        o = await getJSNdetails(o, newvalText);
+
+                        tr.querySelector('td[attr="nomencluture"] input').value = o.nomencluture;
+                        tr.querySelector('td[attr="opr"] select').value = getKeyByValue(C_OPR, o.opr);
+                        tr.querySelector('td[attr="catcd"] select').value = getKeyByValue(C_CatCD, o.catcd);
+                        tr.querySelector('td[attr="price"] input').value = "$" + o.price;
+                    }
+
+                    if (!selectedChangeType) {
+                        me.value = me.defaultValue;
+                        return;
+                    }
+                    globalchangechoice = selectedChangeType;
+                }
+                else {
+                    globalchangechoice = "no";
+                }
+
+
+                if (o && oldvalText != newvalText) {
+                    let requestedChanges = C_ChangeTypeString["iota_" + attributeName] + " from " + getSetFieldValue(attributeName, oldvalText) + " to " + getSetFieldValue(attributeName, newvalText);
+                    meetingMinuteId = await createUpdateMeetingMinuteRecord(o, attributeName, newVal, requestedChanges);
+                    let mmNotesId = await createMeetingMinutesNote(oldvalText, newvalText, attributeName, meetingMinuteId, globalchangechoice);
+                    let attlogicalname = await getAttributeFieldName(attributeName);
+                    setValuesInObjectByAttr(o, o[attributeName], newvalText, attlogicalname, meetingMinuteId, changetype)
+                }
+            }
+            async function openChangeTypePopup() {
+                var isGlobal;
+                var confirmStrings = { text: "Would you like to Global changes?", title: "Confirmation Dialog" };
+                var confirmOptions = { height: 200, width: 450 };
+                await window.parent.Xrm.Navigation.openConfirmDialog(confirmStrings, confirmOptions).then(
+                    function (success) {
+                        if (success.confirmed)
+                            isGlobal = "yes";
+                        else
+                            isGlobal = "no";
+                    });
+
+                return isGlobal;
+            }
+
+            async function getAttributeFieldName(att) {
+                let fieldname = "";
+
+                switch (att) {
+                    case att == "catcd":
+                        fieldname = "iota_catcd"
+                        break;
+                    case att == "opr":
+                        fieldname = "iota_opr"
+                        break;
+                    case att == "roomname":
+                        fieldname = "iota_roomname"
+                        break;
+                    case att == "jsno":
+                        fieldname = "iota_jsno"
+                        break;
+                    case att == "suffix":
+                        fieldname = "iota_suffix"
+                        break;
+                    case att == "nomencluture":
+                        fieldname = "iota_nomencluture"
+                        break;
+                    case att == "qty":
+                        fieldname = "iota_qty"
+                        break;
+                    case att == "price":
+                        fieldname = "iota_price"
+                        break;
+                    case att == "remarks":
+                        fieldname = "iota_remarks"
+                        break;
+                    case att == "requestedby":
+                        fieldname = "iota_requestedby"
+                        break;
+                    default:
+                        fieldname = ""
+                }
+                return fieldname;
+            }
+
+            async function createUpdateMeetingMinuteRecord(o, attr, newValue, requestedChanges) {
+                debugger;
+                let mmObj = {}; var meetingMinute;
+                let meetingminuteid = getSetMeetingMinuteIdByAttr(o, attr);
+                if (meetingminuteid) {
+
+                    setUpdatedValue(newValue, attr, mmObj);
+                    let change = setRequestedChanges(o, attr, requestedChanges);
+                    mmObj["iota_requestedchanges"] = change;
+                    meetingMinute = await window.parent.Xrm.WebApi.updateRecord("iota_meetingminutes", meetingminuteid, mmObj);
+                }
+                else {
+                    mmObj["iota_meetingdate"] = new Date($("#date-meet").val());
+                    mmObj["iota_meetingname"] = $('#text-meet').val();
+                    mmObj.iota_name = (o.roomnumber ?? o.roomnumber) + "-" + (o.jsno ?? o.jsno) + "-" + (o.suffix ?? o.suffix);
+                    mmObj["iota_department@odata.bind"] = `/iota_departments(${o.department})`;
+                    mmObj["iota_roombyroom@odata.bind"] = `/iota_roombyrooms(${o.roombyroomid})`;
+                    mmObj["iota_roomnumber@odata.bind"] = `/iota_rooms(${o.roomid})`;
+                    mmObj["iota_roomname"] = o.roomname;
+                    mmObj["iota_requeststatus"] = 1;
+                    mmObj["iota_jsno"] = o.jsno;
+                    mmObj["iota_suffix"] = o.suffix;
+                    mmObj["iota_catcd"] = getKeyByValue(C_CatCD, o.catcd);
+                    mmObj["iota_nomencluture"] = o.nomencluture;
+                    mmObj["iota_opr"] = getKeyByValue(C_OPR, o.opr);
+                    mmObj["iota_generalnote"] = o.generalnote;
+                    mmObj["iota_JSN@odata.bind"] = `/iota_jsns(${o.jsnid})`;
+                    mmObj["iota_qty"] = parseInt(o.qty);
+                    mmObj["iota_jsnid"] = o.jsnid;
+                    mmObj["iota_roombyroomid"] = o.roombyroomid;
+                    let priceVal = o.price.toString().includes('$') ? o.price.replace('$', '') : o.price;
+                    mmObj["iota_price"] = Number(parseFloat(priceVal).toFixed(4));
+                    mmObj["iota_remarks"] = o.remarks;
+                    mmObj["iota_requestedby"] = $('#requestedBySelect').find(":selected").val();
+                    mmObj["iota_project@odata.bind"] = `/iota_projects(${projectId})`;
+                    mmObj["iota_ProjectConfig@odata.bind"] = "/iota_meetingminutesconfigs(" + guid.toLowerCase() + ")";
+                    mmObj["iota_generalnote"] = o.generalNote;
+                    mmObj["iota_requestedchanges"] = requestedChanges;
+                    setRequestedChanges(o, attr, requestedChanges);
+                    setUpdatedValue(newValue, attr, mmObj);
+                    meetingMinute = await window.parent.Xrm.WebApi.createRecord("iota_meetingminutes", mmObj);
+
+                    getSetMeetingMinuteIdByAttr(o, attr, meetingMinute.id)
+
+                }
+                return meetingMinute?.id;
+            }
+
+            function setRequestedChanges(o, attr, requestedChanges) {
+                if (attr == C_AttributeName.OPR || attr == C_AttributeName.Nomencluture || attr == C_AttributeName.CatCode || attr == C_AttributeName.Price)
+                    return o.jsnlevlchange = o.jsnlevlchange ? o.jsnlevlchange.concat(", ", requestedChanges) : requestedChanges;
+                else
+                    return o.otherchanges = o.otherchanges ? o.otherchanges.concat(", ", requestedChanges) : requestedChanges;
+            }
+
+            function getMeetingMinuteIdByAttr(o, attr) {
+                if (attr == C_AttributeName.remarks || attr == C_AttributeName.qty)
+                    return o.rxrmeetingminuteid;
+                else
+                    return o.jsnmeetingminuteid;
+            }
+
+            function getTextFromValue(val, attr) {
+                var d;
+                switch (attr) {
+                    case C_AttributeName.CatCode:
+                    case C_AttributeName.OPR:
+                        let c = getConstantFromField(attr);
+                        d = c[val];
+                        break;
+                    default:
+                        d = val;
+                }
+                return d;
+            }
+            function setUpdatedValue(val, attr, mmObj) {
+
+                switch (attr) {
+                    case C_AttributeName.Qty:
+                    case C_AttributeName.CatCode:
+                    case C_AttributeName.OPR:
+                        mmObj["iota_" + attr] = parseInt(val);
+                        break;
+                    case C_AttributeName.Price:
+                        let price = val.toString().includes('$') ? val.replace('$', '') : val;
+                        mmObj["iota_" + attr] = Number(parseFloat(price).toFixed(4));
+                        break;
+                    case C_AttributeName.Nomencluture:
+                    case C_AttributeName.Remark:
+                    case C_AttributeName.JSNOther:
+                    case C_AttributeName.JSNName:
+                    case C_AttributeName.RoomName:
+                        mmObj["iota_" + attr] = val;
+                        break;
+                    case C_AttributeName.Department:
+                        mmObj["iota_" + attr + "@odata.bind"] = `/iota_departments(${val})`;
+                        break;
+                    case C_AttributeName.note:
+                        mmObj["iota_" + attr] = val;
+                    default:
+                }
+
+            }
+            function getSetMeetingMinuteIdByAttr(o, attr, meetingMinuteId) {
+                let val = null;
+                if (attr == C_AttributeName.OPR || attr == C_AttributeName.Price || attr == C_AttributeName.CatCode ||
+                    attr == C_AttributeName.Nomencluture) {
+                    if (o.jsnmeetingminuteid) {
+                        val = o.jsnmeetingminuteid
+                    }
+                    if (meetingMinuteId)
+                        o.jsnmeetingminuteid = meetingMinuteId;
+                }
+                else if (attr == qty || attr == remarks || attr == "jsno") {
+                    if (o.rxrmeetingminuteid) {
+                        val = o.rxrmeetingminuteid
+                    }
+                    if (meetingMinuteId)
+                        o.rxrmeetingminuteid = meetingMinuteId;
+                }
+                else {
+                    if (o.rmmmeetingminuteid) { val = o.rmmmeetingminuteid }
+                    if (meetingMinuteId) o.rmmmeetingminuteid = meetingMinuteId;
+                }
+
+                return val
+            }
+
+            function getConstantFromField(attr) {
+                let constVal = "";
+                switch (attr) {
+                    case C_AttributeName.OPR:
+                        constVal = C_OPR;
+                        break;
+                    case C_AttributeName.CatCode:
+                        constVal = C_CatCD;
+                        break;
+
+                    default:
+                }
+                return constVal;
+            }
+
+            function getChangeObjectById(id) {
+                var o = FinalData.find((x) => x.id == id);
+                return o;
+            }
+
+            function getKeyByValue(object, value) {
+                for (let prop in object) {
+                    if (object.hasOwnProperty(prop)) {
+                        if (object[prop] === value)
+                            return prop;
+                    }
+                }
+            }
+
+            async function createMeetingMinutesNote(oldValue, newValue, fieldLogicalName, meetingMinuteId, globalchangechoice) {
+                debugger;
+                var data = {}; let mmNoteId;
+                try {
+                    data["iota_name"] = fieldLogicalName + ' Changed';
+                    data["iota_changetype"] = parseInt(C_changeType["iota_" + fieldLogicalName]);
+                    data["iota_fieldname"] = "iota_" + fieldLogicalName;
+                    data["iota_globalchanges"] = globalchangechoice == "no" ? Boolean(0) : Boolean(1);
+                    data["iota_newvalue"] = fieldLogicalName == "department" ? newValue : getSetFieldValue(fieldLogicalName, newValue);
+                    data["iota_oldvalue"] = fieldLogicalName == "department" ? oldValue : getSetFieldValue(fieldLogicalName, oldValue);
+                    data["iota_meetingminutes@odata.bind"] = "/iota_meetingminuteses(" + meetingMinuteId.toLowerCase() + ")";
+
+                    // create meeting minute record
+                    mmNoteId = await window.parent.Xrm.WebApi.createRecord('iota_meetingminutesnote', data);
+                }
+                catch (e) {
+                    console.log("Erro Inside createMeetingMinutesNote :" + e.message);
+                    window.parent.Xrm.Navigation.openAlertDialog({ text: "Erro Inside createMeetingMinutesNote :" + e.message });
+                }
+                return mmNoteId;
+
+            }
+
+            function getSetFieldValue(fieldLogicalName, Value) {
+                debugger;
+                let val;
+                let cType = parseInt(C_changeType["iota_" + fieldLogicalName]);
+                switch (cType) {
+                    case 9: // price value
+                        val = Value.toString().includes('$') ? Value.toString() : '$' + Value.toString();
+                        break;
+                    default:
+                        val = Value.toString();
+                }
+                return val;
+            }
+
+            async function getDepartmentId(deptId) {
+                let result = await xrmWebAPI.retrieveMultipleRecords("iota_department", "?$select=iota_name&$filter=iota_departmentid eq '" + deptId + "'");
+                return result.entities[0]["iota_name"];
+            }
+
+            async function getRoomId(name) {
+                debugger; let result = await xrmWebAPI.retrieveMultipleRecords("iota_room", "?$select=iota_roomid&$filter=iota_name eq '" + name.toString() + "'");
+                if (result.entities[0] != null) {
+                    return result.entities[0]["iota_roomid"];
+                } else {
+                    window.parent.Xrm.Utility.alertDialog("Room Number is Not Vaild");
+                }
+            }
+
+            var _createTemplate = async function (isRefresh = false) {
+                debugger;
+                
+                console.log("Inside _createTemplate function");
+
+                let gridBody = document.querySelector("#grid-body");
+
+                if (!gridBody) return;
+
+                gridBody.innerHTML = "";
+                parent.Xrm.Utility.showProgressIndicator("Loading...");
+
+                // Load or refresh data
+                if (isRefresh || cachedData.length === 0) {
+                    cachedData = await _meetingMinutesGetData();
+                }
+              
+                console.log("_meetingMinutesGetData count : " + cachedData.length);
+
+
+                // Sort data (same as before)
+                cachedData.sort((a, b) => a.roomnumber - b.roomnumber);
+
+                            
+                // Recalculate total pages
+                totalPages = Math.ceil(cachedData.length / pageSize);
+                // Ensure current page is valid
+                if (currentPage > totalPages) {
+                    currentPage = 1;
+                }
+                if (currentPage < 1) {
+                    currentPage = 1;
+                }
+                // Slice correct rows
+                let paginatedData = cachedData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+                let i = (currentPage - 1) * pageSize + 1;
+
+                if (paginatedData.length > 0) {
+                    paginatedData.forEach(function (item) {
+                        var row = document.createElement('tr');
+                        row.setAttribute("data-rowid", item.id);
+                        let modified = item.modifiedon.split("T", 10);
+
+                    //    row.innerHTML = `<tr style="background-color: #f5f5f5; text-align:center;">
+                    //    <td style="display:none;" attr="roombyroomid" id="roombyroomid${i}">${item.roombyroomid}</td>
+                    //    <td style="width:40px;padding:5px;"><img src="../image/note.png" style="height:15px;" data-bs-toggle="modal" data-bs-target="#RoomNote" onclick="Advic.MeetingMinutes.RoomNoteOpen(this)"></td>
+                    //    <td style="width:5%;padding:5px;"><input type="text" style="width:100%;padding:4px;border:1px solid #ddd;" value="${validateValue(item.roomnumber)}" disabled/></td>
+                    //    <td style="width:10%;padding:2px;" id="roomname${i}"></td>
+                    //    <td style="width:13.2%;padding:2px;" id="department${i}"></td>
+                    //    <td style="width:6.1%;padding:2px;" id="jsno${i}"></td>
+                    //    <td style="width:4%;padding:2px;">${createInputType(item.suffix, C_AttributeName.JSNOther)}</td>
+                    //    <td style="width:23.5%;padding:2px;">${createInputType(item.nomencluture, C_AttributeName.Nomencluture)}</td>
+                    //    <td style="width:6.1%;padding:2px;" id="opr${i}"></td>
+                    //    <td style="width:5%;padding:2px;" id="catcd${i}"></td>
+                    //    <td style="width:5%;padding:2px;">${createInputType(item.qty, C_AttributeName.Qty)}</td>
+                    //    <td style="width:7.1%;padding:2px;" data-type="currency">${createInputType(item.price, C_AttributeName.Price)}</td>
+                    //    <td style="width:7.1%;padding:2px;" id="requestedby${i}"></td>
+                    //    <td style="width:7.1%;padding:2px;"><input type="text" value="${validateValue(item.modifiedby)}" style="width:98%;padding:4px;border:1px solid #ddd;" disabled/></td>
+                    //    <td style="width:7.1%;padding:2px;"><input type="text" value="${modified[0]}" style="width:98%;padding:4px;border:1px solid #ddd;" disabled/></td>
+                        //</tr>`;
+                        row.innerHTML = '<tr style="background-color: #f5f5f5;  text-align: center;">' +
+                            '<td style="display:none;" class="row-td" attr="roombyroomid" id="roombyroomid' + i + '">' + item.roombyroomid + '</td>' +
+                            '<td class="row-td" style="width:40px; padding: 5px;" id="generalnote' + i + '"><img src="../image/note.png" style="height:15px;" data-bs-toggle="modal" data-bs-target="#RoomNote" onclick="Advic.MeetingMinutes.RoomNoteOpen(this)"></td>' +
+                            '<td style="width:5%; padding: 5px;" class="row-td" attr="' + C_AttributeName.RoomNumber + '" id="roomnumber' + i + '"><input type="text" class="row-td" style="width: 100%; padding: 4px; border: 1px solid #ddd;" value="' + validateValue(item.roomnumber) + '" disabled/></td>' +
+                            '<td class="row-td" style="width: 10%; padding: 2px;  " attr="' + C_AttributeName.RoomName + '" id="roomname' + i + '"></td>' +
+                            '<td class="row-td" style="width: 13.2%; padding: 2px; " attr="' + C_AttributeName.Department + '" id="department' + i + '"></td>' +
+                            '<td class="row-td" style="width: 6.1%; padding: 2px;  " attr="' + C_AttributeName.JSNName + '" id="jsno' + i + '"></td>' +
+                            '<td style="width: 5%; padding: 2px;" class="row-td" attr="' + C_AttributeName.JSNOther + '">' + createInputType(item.suffix, C_AttributeName.JSNOther) + '</td>' +
+                            '<td style="width: 23.5%; padding: 2px;" class="row-td" attr="' + C_AttributeName.Nomencluture + '">' + createInputType(item.nomencluture, C_AttributeName.Nomencluture) + '</td>' +
+                            '<td style="width: 6.1%; padding: 2px; " class="row-td" attr="' + C_AttributeName.OPR + '" id="opr' + i + '"></td>' +
+                            '<td style="width: 5%; padding: 2px; " class="row-td" attr="' + C_AttributeName.CatCode + '" id="catcd' + i + '"></td>' +
+                            '<td style="width: 5%; padding: 2px;" class="row-td" attr="' + C_AttributeName.Qty + '">' + createInputType(item.qty, C_AttributeName.Qty) + '</td>' +
+                            '<td style="width: 7.1%; padding: 2px;" class="row-td" attr="' + C_AttributeName.Price + '" data-type="currency">' + createInputType(item.price, C_AttributeName.Price) + '</td>' +
+                            //'<td style="width: 10%; padding: 1px;" class="row-td" attr="' + C_AttributeName.Remark + '">' + createInputType(item.remarks, C_AttributeName.Remark) + '</td>' +
+                            '<td style="width: 7.1%; padding: 2px; " class="row-td" attr="requestedby" id="requestedby' + i + '"></td>' +
+                            '<td style="width: 7.1%; padding: 2px; " class="row-td" attr="modifiedby" id="modifiedby' + i + '"><input type="text" class="row-td" style="width: 98%; padding: 4px; border: 1px solid #ddd;" value="' + validateValue(item.modifiedby) + '" disabled/></td>' +
+                            '<td style="width: 7.1%; padding: 2px; " class="row-td" attr="modifiedon" id="modifiedon' + i + '"><input type="text" class="row-td" style="width: 98%; padding: 4px; border: 1px solid #ddd;" value="' + modified[0] + '" disabled/></td>' +
+                            '</tr>';
+
+                        gridBody.appendChild(row);
+
+                        document.getElementById(`roomname${i}`).appendChild(createSelect("roomname", item.roomname, cachedData, "roomNameSelect"));
+                        document.getElementById(`department${i}`).appendChild(SetDepartmant(item.department));
+                        document.getElementById(`jsno${i}`).appendChild(createSelectjsns("jsno", item.jsno, cachedData, "jsnoSelect", i));
+                        document.getElementById(`opr${i}`).appendChild(createSelect(C_OPR, item.opr, cachedData, "oprSelect"));
+                        document.getElementById(`catcd${i}`).appendChild(createSelect(C_CatCD, item.catcd, cachedData, "catcdSelect"));
+                        document.getElementById(`requestedby${i}`).appendChild(createSelect(C_Requested, item.requestedby, cachedData, "requestedBySelect"));
+
+                        i++;
+                    });
+                } else {
+                    gridBody.innerHTML = `<tr><td colspan="15" align="center">There are no data available.</td></tr>`;
+                }
+
+                renderPagination(totalPages);
+
+                parent.Xrm.Utility.closeProgressIndicator();
+                console.log("Finished _createTemplate function");
+            };
+            function renderPagination(totalPages) {
+
+                const paginationDiv = document.getElementById("pagination");
+
+                if (!paginationDiv) {
+                    console.warn("Pagination div not found.");
+                    return;
+                }
+
+                // Hide pagination if no data or only one page
+                if (totalPages < 1) {
+                    paginationDiv.style.display = "none";
+                    return;
+                }
+
+                // Show pagination when more than 1 page
+                paginationDiv.style.display = "block";
+
+                paginationDiv.innerHTML = `
+            <button onclick="Advic.MeetingMinutes.PrevPage()" ${currentPage === 1 ? "disabled" : ""}>⬅ Prev</button>
+            <span style="margin: 0 10px;">Page ${currentPage} of ${totalPages}</span>
+            <button onclick="Advic.MeetingMinutes.NextPage()" ${currentPage === totalPages ? "disabled" : ""}>Next ➡</button>
+        `;
+            }
+
+            function _nextPage() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    _createTemplate();
+                }
+            }
+
+            function _prevPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    _createTemplate();
+                }
+            }
+            function createSelectjsns(options, selectedValue, datarow, selectclass, uniqueId) {
+                let select = document.createElement('select');
+                select.className = selectclass;
+                select.id = "jsnid_" + uniqueId;
+                if (typeof options === "string") {
+                    let obj = {};
+                    for (let i = 0; i < datarow.length; i++) {
+                        obj[datarow[i][options]] = datarow[i][options];
+                    }
+                    for (let key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = obj[key];
+                            if (selectedValue != null && (key === selectedValue.toString() || obj[key] === selectedValue.toString())) {
+                                option.selected = true;
+                            }
+                            select.appendChild(option);
+                        }
+                    }
+                    // select.addEventListener("select2:selecting", trackChanges);
+
+                    $(select).on('select2:selecting', trackChanges);
+
+                } else {
+                    for (let key in options) {
+                        if (options.hasOwnProperty(key)) {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = options[key];
+                            console.log(obj[key]);
+                            if (selectedValue != null && (key === selectedValue.toString() || options[key] === selectedValue.toString())) {
+                                option.selected = true;
+                            }
+                            select.appendChild(option);
+                        }
+                    }
+                    $(select).on('select2:selecting', trackChanges);
+
+                }
+
+                setTimeout(() => {
+                    const select = $("#jsnid_" + uniqueId);
+                    select.select2({ tags: true });
+                    // select.on("change", function () {
+                    //     trackChanges.call(this);
+                    // });
+                }, 0);
+
+                return select;
+            }
+
+            //function createSelectjsns(options, selectedValue, datarow, selectclass, uniqueId) {
+
+            //    let select = document.createElement('select');
+            //    select.className = selectclass;
+            //    select.id = "jsnid_" + uniqueId;
+
+            //    // Populate options dynamically
+            //    let obj = {};
+            //    datarow.forEach(row => { obj[row[options]] = row[options]; });
+
+            //    Object.keys(obj).forEach(key => {
+            //        let opt = document.createElement("option");
+            //        opt.value = key;
+            //        opt.textContent = obj[key];
+            //        if (selectedValue && key == selectedValue) opt.selected = true;
+            //        select.appendChild(opt);
+            //    });
+
+            //    setTimeout(() => {
+
+            //        const selectControl = $("#jsnid_" + uniqueId);
+
+            //        // Initialize Select2 if not already
+            //        if (!selectControl.hasClass("select2-hidden-accessible")) {
+            //            selectControl.select2({ tags: true });
+            //        }
+
+            //        // IMPORTANT: Remove old handlers (pagination recreates controls)
+            //        selectControl.off("select2:select change");
+
+            //        // Attach event
+            //        selectControl.on("select2:select change", function () {
+            //            console.log("Event fired for:", uniqueId, "Value:", $(this).val());
+            //            _prePopulateFieldValues(uniqueId);
+            //        });
+
+            //    }, 200);
+
+
+            //    return select;
+            //}
+
+            var PrePopulateFieldValuesBassedOnJSN = async function (rowId) {
+
+                // Get dynamic values for THIS row
+                let jsonName = $(`#jsnid_${rowId}`).val();
+                let other = $(`#jsnoOther_${rowId}`).val(); // if you have related other field dynamically
+                let oprField = $(`#opr${rowId}`);
+                let catCdField = $(`#catcd${rowId}`);
+                let nomenclatureField = $(`#nomencluture${rowId}`);
+                let priceField = $(`#price${rowId}`);
+
+                // Build filter
+                let jsnFilter = jsonName && other
+                    ? `iota_name eq '${jsonName}' and iota_suffix eq '${other}'`
+                    : `iota_name eq '${jsonName}'`;
+
+                // 🔥 Fetch Matching JSN Record
+                let result = await xrmWebAPI.retrieveMultipleRecords(
+                    "iota_jsn",
+                    `?$select=_iota_acquisitionid_value,_iota_opr_value,iota_nomenclature,iota_romprice&$filter=${jsnFilter} and _iota_projectid_value eq ${projectId}`
+                );
+
+                // Fallback Logic
+                if (result.entities.length === 0) {
+                    result = await xrmWebAPI.retrieveMultipleRecords(
+                        "iota_jsn",
+                        `?$select=_iota_acquisitionid_value,_iota_opr_value,iota_nomenclature,iota_romprice&$filter=${jsnFilter} and _iota_projectid_value eq '705f5139-1cfa-ed11-8849-00224824973c'`
+                    );
+                }
+
+                if (result.entities.length > 0) {
+                    let data = result.entities[0];
+
+                    // Extract formatted values
+                    let oprVal = data['_iota_opr_value@OData.Community.Display.V1.FormattedValue'];
+                    let catCdVal = data['_iota_acquisitionid_value@OData.Community.Display.V1.FormattedValue'];
+                    let nomVal = data['iota_nomenclature'];
+                    let priceVal = data['iota_romprice'];
+
+                    // Populate dynamic row fields
+                    setDropDownVal(C_OPR, oprVal, `opr${rowId}`);
+                    setDropDownVal(C_CatCD, catCdVal, `catcd${rowId}`);
+
+                    nomenclatureField.val(nomVal);
+                    priceField.val(priceVal);
+                }
+                else {
+                    // Reset if no match
+                    oprField.val(null);
+                    catCdField.val(null);
+                    nomenclatureField.val(null);
+                    priceField.val(null);
+                }
+            }
+
+
+            function generateGUID() {
+                return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+                    (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+                );
+            }
+            function createInputType(val, fieldLogicalName) {
+                var val = validateValue(val);
+                if (C_AttributeName.Price == fieldLogicalName) {
+                    val = val.includes('$') ? val.toString() : '$' + val.toString();
+                }
+                var ctrl = '<input type="text" class="row-td" style="width: 98%; padding: 4px; border: 1px solid #ddd;text-align: right;" value="' + val + '" onchange="Advic.MeetingMinutes.TrackChanges(event)"/>';
+                return ctrl;
+            }
+
+            function validateValue(val) {
+                if (val === 0)
+                    val = 0;
+                else if (!val)
+                    val = "";
+                else if (val == "null")
+                    val = "";
+
+
+                val = val.toString().replace(/"/g, '');
+                return val;
+            }
+
+            function createSelect(options, selectedValue, datarow, selectclass) {
+                let select = document.createElement('select');
+                select.className = selectclass;
+
+                if (typeof (options) == "string") {
+                    let obj = {};
+                    for (let i = 0; i < datarow.length; i++) {
+                        obj[datarow[i][options]] = datarow[i][options];
+                    }
+                    for (let key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = obj[key];
+                            if (selectedValue != null) {
+                                if (key === selectedValue.toString() || options[key] == selectedValue.toString()) {
+                                    // Set the selected option
+                                    option.selected = true;
+                                }
+                            }
+                            select.appendChild(option);
+                        }
+                    }
+                    select.addEventListener("change", trackChanges);
+                    return select;
+                } else {
+                    for (let key in options) {
+                        if (options.hasOwnProperty(key)) {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = options[key];
+                            if (selectedValue != null) {
+                                if (key === selectedValue.toString() || options[key] == selectedValue.toString()) {
+                                    option.selected = true;
+                                    // Set the selected option
+                                }
+                            }
+                            select.appendChild(option);
+                        }
+                    }
+                    select.addEventListener("change", trackChanges);
+                    return select;
+                }
+            }
+
+            async function getRoomByRoomRecords(departmentId, roomId, jsnId) {
+                let roombyroom = [];
+                var results = await getRoomByRoomData(departmentId, roomId, jsnId);
+                if (results != null && results.entities.length > 0) {
+                    for (var i = 0; i < results.entities.length; i++) {
+                        let data = results.entities[i];
+                        let rxrObj = setValueOfRxR(data);
+                        roombyroom.push(rxrObj);
+                    }
+                }
+
+                return roombyroom;
+            }
+
+            async function getRoomByRoomData(departmentId, roomId, jsnId, rxrId) {
+                var roombyroom = [];
+                let fetchXML = '<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">';
+                fetchXML += '<entity name="iota_roombyroom">';
+                fetchXML += '<attribute name="iota_roombyroomid" />';
+                fetchXML += '<attribute name="iota_newroom" />';
+                fetchXML += '<attribute name="iota_jsn" />';
+                fetchXML += '<attribute name="iota_remark" />';
+                fetchXML += '<attribute name="iota_roomquantity" />';
+                fetchXML += '<order attribute="iota_newroom" descending="false" />';
+                fetchXML += '<filter type="and">';
+                fetchXML += '<condition attribute="iota_projectid" operator="eq"  value="' + projectId + '" /> ';
+                fetchXML += '<condition attribute="statecode" operator="eq" value="0" />';
+                fetchXML += '</filter>';
+                fetchXML += '<link-entity name="iota_room" from="iota_roomid" to="iota_newroom" visible="false" link-type="inner" alias="room">';
+                fetchXML += '<attribute name="iota_department" />';
+                fetchXML += '<attribute name="iota_name" />';
+                fetchXML += '<attribute name="iota_roomname" />';
+                fetchXML += '{0}';
+                fetchXML += '</link-entity>';
+                fetchXML += '<link-entity name="iota_jsn" from="iota_jsnid" to="iota_jsn" visible="false" link-type="inner" alias="jsn">';
+                fetchXML += '<attribute name="iota_romprice" />';
+                fetchXML += '<attribute name="iota_opr" />';
+                fetchXML += '<attribute name="iota_nomenclature" />';
+                fetchXML += '<attribute name="chps_jsno" />';
+                fetchXML += '<attribute name="iota_name" />';
+                fetchXML += '<attribute name="iota_acquisitionid" />';
+                fetchXML += '<attribute name="iota_suffix" />{2}';
+                fetchXML += '</link-entity>{1}';
+                fetchXML += '</entity>';
+                fetchXML += '</fetch>';
+
+                if (jsnId != -1) {
+                    let condition = '<filter type="and"><condition attribute="iota_jsnid" operator="eq" value="' + jsnId + '"/>';
+                    condition += '</filter>';
+                    fetchXML = fetchXML.replace('{2}', condition);
+                }
+
+                if (departmentId != -1) {
+                    let condition = '<filter type="and"><condition attribute="iota_department" operator="eq" value="' + departmentId + '"/>';
+                    if (roomId != -1)
+                        condition += '<condition attribute="iota_roomid" operator="eq" value="' + roomId + '"/>';
+                    condition += '</filter>';
+                    fetchXML = fetchXML.replace('{0}', condition);
+                } else {
+                    if (roomId != -1) {
+                        let condition = '<filter>';
+
+                        condition += '<condition attribute="iota_roomid" operator="eq" value="' + roomId + '"/>';
+                        condition += '</filter>';
+                        fetchXML = fetchXML.replace('{0}', condition);
+                    }
+                }
+
+                if (rxrId) {
+                    fetchXML = fetchXML.replace('{1}', '<filter type="and"><condition attribute="iota_roombyroomid" operator="eq" value="' + rxrId + '"/>');
+                } else {
+                    fetchXML = fetchXML.replace('{1}', ' ');
+                }
+
+                let fetchXMLResult = "?fetchXml=" + fetchXML;
+                var results = await xrmWebAPI.retrieveMultipleRecords('iota_roombyroom', fetchXMLResult);
+
+                return results;
+            }
+
+            function setValueOfRxR(data) {
+                let rxrObj = {};
+                rxrObj.id = generateGUID();
+                rxrObj.roombyroomid = data.iota_roombyroomid;
+                rxrObj.roomnumber = data["room.iota_name"] ? data["room.iota_name"] : "";
+                rxrObj.roomname = data["room.iota_roomname"] ? data["room.iota_roomname"] : "";
+                rxrObj.roomid = data["_iota_newroom_value"] ? data["_iota_newroom_value"] : "";
+                rxrObj.departmentname = data["room.iota_department"] ? data["room.iota_department@OData.Community.Display.V1.FormattedValue"] : "";
+                rxrObj.department = data["room.iota_department"] ? data["room.iota_department"] : "";
+                rxrObj.jsnid = data["_iota_jsn_value"] ? data["_iota_jsn_value"] : "";
+                rxrObj.jsno = data["_iota_jsn_value"] ? data["_iota_jsn_value@OData.Community.Display.V1.FormattedValue"] : "";
+                rxrObj.suffix = data["jsn.iota_suffix"] ? data["jsn.iota_suffix"] : "";
+                rxrObj.nomencluture = data["jsn.iota_nomenclature"] ? data["jsn.iota_nomenclature"] : "";
+                rxrObj.opr = data["jsn.iota_opr"] ? data["jsn.iota_opr@OData.Community.Display.V1.FormattedValue"] : "";
+                rxrObj.catcd = data["jsn.iota_acquisitionid"] ? data["jsn.iota_acquisitionid@OData.Community.Display.V1.FormattedValue"] : "";
+                rxrObj.price = data["jsn.iota_romprice"] ? data["jsn.iota_romprice"] : 0;
+                rxrObj.qty = data["iota_roomquantity"];
+                rxrObj.remarks = data["iota_remark"] ? data["iota_remark"] : "";
+                rxrObj.requestedby = "";
+                rxrObj.modifiedby = "";
+                rxrObj.modifiedon = "";
+
+                return rxrObj;
+            }
+
+            async function getMeetingMinutesReords(pId) {
+                var results = await getMeetingMinutesData(pId);
+                var meetingMinutes = [];
+                if (results.entities.length > 0) {
+                    for (var i = 0; i < results.entities.length; i++) {
+                        let d = results.entities[i];
+                        let m = setValuesOfMeetingMinutes(d);
+                        meetingMinutes.push(m);
+                    }
+                }
+                return meetingMinutes;
+            }
+
+            async function getMeetingMinutesData(pId, meetingMinutesId) {
+                let fetchXML = '<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">';
+                fetchXML += '<entity name = "iota_meetingminutes" > ';
+                fetchXML += '<attribute name="iota_meetingminutesid" />';
+                fetchXML += '<attribute name="iota_roomnumber" />';
+                fetchXML += '<attribute name="iota_roomname" />';
+                fetchXML += '<attribute name="iota_roombyroom" />';
+                fetchXML += '<attribute name="iota_requestedby" />';
+                fetchXML += '<attribute name="iota_requeststatus" />';
+                fetchXML += '<attribute name="iota_remarks" />';
+                fetchXML += '<attribute name="iota_qty" />';
+                fetchXML += '<attribute name="iota_projectconfig" />';
+                fetchXML += '<attribute name="iota_project" />';
+                fetchXML += '<attribute name="iota_price" />';
+                fetchXML += '<attribute name="iota_opr" />';
+                fetchXML += '<attribute name="iota_nomencluture" />';
+                fetchXML += '<attribute name="modifiedon" />';
+                fetchXML += '<attribute name="modifiedby" />';
+                fetchXML += '<attribute name="iota_suffix" />';
+                fetchXML += '<attribute name="iota_jsnid" />';
+                fetchXML += '<attribute name="iota_jsn" />';
+                fetchXML += '<attribute name="iota_jsno" />';
+                fetchXML += '<attribute name="iota_generalnote" />';
+                fetchXML += '<attribute name="iota_department" />';
+                fetchXML += '<attribute name="iota_catcd" />';
+                fetchXML += '<attribute name="iota_requestedchanges" />';
+                fetchXML += '<order attribute="createdon" descending="false" />';
+                fetchXML += '<filter type="and">';
+                fetchXML += '{0}';
+                fetchXML += '<condition attribute="statecode" operator="eq" value="0" />';
+                fetchXML += '<condition attribute="iota_project" operator="eq" value="' + pId + '" />';
+                fetchXML += '<condition attribute="iota_requeststatus" operator="eq" value="1" />'; // Requested
+                fetchXML += '</filter>';
+                fetchXML += ' <link-entity name="iota_meetingminutesnote" from="iota_meetingminutes" to="iota_meetingminutesid" link-type="inner" alias="mnote" >';
+                fetchXML += '<attribute name="iota_meetingminutesnoteid" />';
+                fetchXML += '<attribute name="iota_changetype" />';
+                fetchXML += '<attribute name="iota_fieldname" />';
+                fetchXML += '<attribute name="iota_newvalue" />';
+                fetchXML += '<attribute name="iota_oldvalue" />';
+                fetchXML += '<attribute name="createdby" />';
+                fetchXML += '<attribute name="createdon" />';
+                fetchXML += '<attribute name="iota_meetingminutes" />';
+                fetchXML += '<order attribute="createdon" descending="false" />';
+                fetchXML += '</link-entity >';
+                fetchXML += '</entity>';
+                fetchXML += '</fetch>';
+
+                if (meetingMinutesId) {
+                    fetchXML = fetchXML.replace("{0}", '<condition attribute="statecode" operator="eq" value="0" />');
+                }
+                fetchXML = fetchXML.replace("{0}", "");
+
+                let fetchXMLResult = "?fetchXml=" + fetchXML;
+                var results = await xrmWebAPI.retrieveMultipleRecords('iota_meetingminutes', fetchXMLResult);
+
+                return results;
+
+            }
+
+            function setValuesOfMeetingMinutes(d) {
+                let m = {};
+                m.meetingminuteid = d.iota_meetingminutesid;
+                m.meetingminuteid = d.iota_meetingminutesid;
+                m.meetingminutenoteid = d['mnote.iota_meetingminutesnoteid'];
+                m.roomnumber = d['_iota_roomnumber_value'] ? d['_iota_roomnumber_value@OData.Community.Display.V1.FormattedValue'] : "";
+                m.roomid = d['_iota_roomnumber_value'] ? d['_iota_roomnumber_value'] : "";
+                m.roomname = d.iota_roomname ? d.iota_roomname : "";
+                m.requestedby = d['iota_requestedby'] ? d['iota_requestedby@OData.Community.Display.V1.FormattedValue'] : "";
+                m.jsnid = d['iota_jsnid'] ? d['iota_jsnid'] : "";
+                m.roombyroomid = d['iota_roombyroomid'] ? d['iota_roombyroomid'] : "";
+                m.jsno = d['iota_jsno'] ? d['iota_jsno'] : "";
+                m.suffix = d['iota_suffix'] ? d['iota_suffix'] : "";
+                m.nomencluture = d['iota_nomencluture'] ? d['iota_nomencluture'] : "";
+                m.opr = d['iota_opr'] ? d['iota_opr@OData.Community.Display.V1.FormattedValue'] : "";
+                m.catcd = d['iota_catcd'] ? d['iota_catcd@OData.Community.Display.V1.FormattedValue'] : "";
+                m.qty = d['iota_qty'] ? d['iota_qty'] : 0;
+                m.price = d['iota_price'] ? d['iota_price'] : 0;
+                m.remarks = d['iota_remarks'] ? d['iota_remarks'] : "";
+                m.generalnote = d['iota_generalnote'] ? d['iota_generalnote'] : "";
+                m.modifiedby = d["_modifiedby_value"] ? d["_modifiedby_value@OData.Community.Display.V1.FormattedValue"] : "";
+                m.modifiedon = d['modifiedon'] ? d['modifiedon'] : "";
+                m.changetype = d['mnote.iota_changetype'] ? d['mnote.iota_changetype'] : "";
+                m.fieldname = d['mnote.iota_fieldname'] ? d['mnote.iota_fieldname'] : "";
+                m.newvalue = d['mnote.iota_newvalue'] ? d['mnote.iota_newvalue'] : "";
+                m.oldvalue = d['mnote.iota_oldvalue'] ? d['mnote.iota_oldvalue'] : "";
+                m.createdby = d['mnote.createdby'] ? d['mnote.createdby@OData.Community.Display.V1.FormattedValue'] : "";
+                m.createdon = d['mnote.createdon'] ? d['mnote.createdon'] : "";
+                m.requestedchanges = d['iota_requestedchanges'] ? d['iota_requestedchanges'] : "";
+                return m;
+            }
+
+            var _meetingMinutesGetData = async function () {
+
+                let departmentId = $("#ddlDept").val();
+                let roomId = $("#ddlRoom").val();
+                let jsnId = document.getElementById("ddlJsn").value;
+                var RxRData = await getRoomByRoomRecords(departmentId, roomId, jsnId)
+
+                var meetingMinutesData = await getMeetingMinutesReords(projectId);
+                //for loop on FinalData
+                for (var i = 0; i < RxRData.length; i++) {
+                    let d = RxRData[i];
+
+                    var matchData = meetingMinutesData.filter((x) => x.roombyroomid == d.roombyroomid);
+                    if (matchData.length > 0) {
+                        for (var j = 0; j < matchData.length; j++) {
+                            let m = matchData[j];
+                            d.rxrmeetingminuteid = m.meetingminuteid
+                            d.modifiedby = m.modifiedby
+                            d.modifiedon = m.modifiedon;
+                            d.remarks = m.remarks;
+                            d.requestedchanges = m.requestedchanges;
+                            //d.qty = m.qty;
+                            //d.jsno = m.jsno;
+                            //d.suffix = m.suffix;
+                            setChangeValueForUI(m, d);
+                        }
+                    }
+                    var matchRmData = meetingMinutesData.filter((x) => x.roomid == d.roomid && x.roombyroomid == "" && x.jsnid == d.jsnid);
+                    if (matchRmData.length > 0) {
+                        for (var k = 0; k < matchRmData.length; k++) {
+                            let m = matchRmData[k];
+                            d.rmmmeetingminuteid = m.meetingminuteid
+                            d.modifiedby = m.modifiedby
+                            d.modifiedon = m.modifiedon;
+                            d.requestedchanges = m.requestedchanges;
+                            //d.roomname = m.roomname;
+                            //d.department = m.department;
+                            setChangeValueForUI(m, d);
+                        }
+                    }
+
+                    //global change data
+                    var globalChangeData = meetingMinutesData.filter((x) => x.jsnid == d.jsnid && x.roombyroomid == "");
+                    if (globalChangeData.length > 0) {
+                        for (var k = 0; k < globalChangeData.length; k++) {
+                            let m = globalChangeData[k];
+                            d.modifiedby = m.modifiedby;
+                            d.jsnmeetingminuteid = m.meetingminuteid;
+                            d.modifiedon = m.modifiedon;
+                            d.requestedchanges = m.requestedchanges;
+                            //d.nomencluture = m.nomencluture;
+                            //d.opr = m.opr;
+                            //d.catcd = m.catcd;
+                            //d.price = m.price;
+                            setChangeValueForUI(m, d);
+
+                        }
+                    }
+                }
+                FinalData = RxRData;
+
+
+                return FinalData;
+            };
+
+            function setChangeValueForUI(matchdata, data) {
+                let changeType = matchdata.changetype;
+                if (changeType != null) {
+                    let changeTypeVal = getChangeType(changeType);
+                    if (changeTypeVal != null) {
+                        setValuesInObjectByAttr(data, matchdata.oldvalue, matchdata.newvalue, matchdata.fieldname, matchdata.meetingminutenoteid, changeTypeVal)
+                    }
+                }
+            }
+
+            function setValuesInObjectByAttr(data, oldValue, newValue, fieldName, MeetingNotesId, changeTypeVal) {
+                data[changeTypeVal + "_" + "oldvalue"] = oldValue;
+                data[changeTypeVal + "_" + "newvalue"] = newValue;
+                data[changeTypeVal] = newValue;
+                data[changeTypeVal + "_" + "fieldname"] = fieldName;
+                data[changeTypeVal + "_" + "meetingnoteid"] = MeetingNotesId;
+                data[changeTypeVal + "_" + "datatype"] = getDataTypeByChangeType(changeTypeVal)
+            }
+
+            function getDataTypeByChangeType(changeType) {
+                let val = C_Data_Type.String;
+                switch (changeType) {
+                    case 5: //Nomencluture
+                    case 10: // Remarks Change
+                    case 12: // Department Note Change
+                    case 13: // Project Note Change
+                    case 14: // Room Note Change
+                    case 15: // JSN Other Change
+                        val = C_Data_Type.String;
+                        break;
+                    case 2: // Room Name Change
+                    case 3: //Department Change
+                    case 4: // JSNO Change
+                    case 6: // OPR Change
+                    case 7: //Cat CD Change
+                        val = C_Data_Type.Lookup;
+                        break;
+                    case 8: // QTY Change
+                        val = C_Data_Type.Number;
+                        break;
+                    case 9: // Price Change
+                        val = C_Data_Type.Money;
+                        break;
+                    case 11: // Requested By Change
+                        val = C_Data_Type.Choice;
+                        break;
+                    default:
+                }
+                return val;
+            }
+
+            function getChangeType(changeType) {
+                let val = "";
+                switch (changeType) {
+                    case 1: //Room Number Change
+                        val = "roomnumber";
+                        break;
+                    case 2: // Room Name Change
+                        val = "roomname";
+                        break;
+                    case 3: //Department Change
+                        val = "departmentname";
+                        break;
+                    case 4: // JSNO Change
+                        val = "jsno";
+                        break;
+                    case 5: //Nomencluture
+                        val = "nomencluture";
+                        break;
+                    case 6: // OPR Change
+                        val = "opr"
+                        break;
+                    case 7: //Cat CD Change
+                        val = "catcd"
+                        break;
+                    case 8: // QTY Change
+                        val = "qty";
+                        break;
+                    case 9: // Price Change
+                        val = "price";
+                        break;
+                    case 10: // Remarks Change
+                        val = "remarks";
+                        break;
+                    case 11: // Requested By Change
+                        val = "requestedby";
+                        break;
+                    case 12: // Department Note Change
+                        break;
+                    case 13: // Project Note Change
+                        break;
+                    case 14: // Room Note Change
+                        break;
+                    case 15: // JSN Other Change
+                        val = "suffix";
+                        break;
+                    default:
+                }
+                return val;
+            }
+
+            function SetDepartmant(deparmentId) {
+                var select = document.createElement('select');
+                select.className = "selectdepartment";
+
+                departments.forEach((item) => {
+                    $(select).append($("<option></option>").attr("value", item.id).text(item.name));
+                });
+
+                for (let i = 0; i < select.childNodes.length; i++) {
+                    if (select.childNodes[i].value == deparmentId)
+                        select.childNodes[i].selected = true;
+                }
+                select.addEventListener("change", trackChanges);
+                return select;
+            };
+
+            var _getRoomsDatabyDeptId = async function (departmentId) {
+                debugger;
+                $("#ddlCatcd").val(null);
+                $("#ddlopr").val(null);
+                $("#nomenclature").val(null);
+                $("#price").val(null);
+                $("#other").val(null);
+                $("#jsno").val(null);
+                $("#qty").val(null);
+                $("#price").val(null);
+
+                let rmList = [];
+                let fetchXML = '<fetch mapping="logical">';
+                fetchXML += '<entity name="iota_room">';
+                fetchXML += '<attribute name="iota_roomid" />';
+                fetchXML += '<attribute name="iota_name" />';
+                fetchXML += '<attribute name="iota_roomname" />';
+                fetchXML += '<attribute name="iota_roomcode" />';
+                fetchXML += '<order attribute="iota_name" descending="false" />';
+                fetchXML += '<filter type="and">';
+                fetchXML += '<condition attribute="statecode" operator="eq" value="0"/> {0}';
+                fetchXML += '<condition attribute="iota_project" operator="eq" value="' + projectId + '" />';
+                fetchXML += '</filter>';
+                fetchXML += '</entity>';
+                fetchXML += '</fetch >';
+
+                if (departmentId == "-1" || departmentId == null) {
+                    fetchXML = fetchXML.replace('{0}', '<condition attribute="iota_roomid" operator="not-null" />');
+                }
+                else {
+                    fetchXML = fetchXML.replace('{0}', '<condition attribute="iota_department" operator="eq" value="' + departmentId + '" />');
+                }
+
+
+                let fetchXMLResult = "?fetchXml=" + fetchXML;
+                await xrmWebAPI.retrieveMultipleRecords("iota_room", fetchXMLResult).then(function sucess(rooms) {
+                    rooms.entities.forEach(room => {
+                        let x = {};
+                        x.id = room.iota_roomid;
+                        x.number = room.iota_name;
+                        x.roomname = room.iota_roomname;
+                        x.name = x.number + " (" + x.roomname + ")";
+                        rmList.push(x);
+                    }
+                    );
+                }, function fail(err) {
+                    console.log(err);
+                });
+                return rmList;
+            }
+
+            var _bindRoomDropdown = async function () {
+                debugger;
+                try {
+                    $("#ddlRoom").html('');
+                    let departmentId = $("#ddlDept").val();
+
+                    let lstrm = await _getRoomsDatabyDeptId(departmentId);
+
+                    $("#ddlRoom").append($("<option></option>").attr("value", '-1').text('All Room'));
+
+                    lstrm.forEach((item) => {
+                        $("#ddlRoom").append($("<option></option>").attr("value", item.id).text(item.name));
+                    })
+                } catch (e) { }
+            }
+            var _getjsnDatabyProjectId = async function () {
+                debugger;
+                $("#ddlCatcd").val(null);
+                $("#ddlopr").val(null);
+                $("#nomenclature").val(null);
+                $("#price").val(null);
+                $("#other").val(null);
+                $("#jsno").val(null);
+                $("#qty").val(null);
+                $("#price").val(null);
+
+                let jsnlist = [];
+                let fetchXML = `
+                                                    <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true">
+                                                    <entity name="iota_jsn">
+                                                        <attribute name="iota_name" />
+                                                        <attribute name="iota_jsnid" />
+                                                        <attribute name="iota_suffix" />
+                                                        <order attribute="iota_name" descending="false" />
+                                                        <filter type="and">
+                                                        <condition attribute="statecode" operator="eq" value="0" />{0}
+                                                        <condition attribute="iota_name" operator="not-null" />
+                                                        </filter>
+                                                    </entity>
+                                                    </fetch>
+                                                    `;
+
+                if (projectId) {
+                    fetchXML = fetchXML.replace('{0}', '<condition attribute="iota_projectid" operator="eq" value="' + projectId + '" />');
+                }
+
+
+                let fetchXMLResult = "?fetchXml=" + fetchXML;
+                await xrmWebAPI.retrieveMultipleRecords("iota_jsn", fetchXMLResult).then(function sucess(jsn) {
+                    jsn.entities.forEach(room => {
+                        let x = {};
+                        x.id = jsn.iota_jsnid;
+                        x.name = jsn.iota_name;
+                        x.other = jsn.iota_suffix;
+
+                        jsnlist.push(x);
+                    }
+                    );
+                }, function fail(err) {
+                    console.log(err);
+                });
+                return jsnlist;
+            }
+
+            var _getjsnDatabyProjectId = async function (projectId) {
+                debugger;
+                $("#ddlCatcd").val(null);
+                $("#ddlopr").val(null);
+                $("#nomenclature").val(null);
+                $("#price").val(null);
+                $("#other").val(null);
+                $("#jsno").val(null);
+                $("#qty").val(null);
+                $("#price").val(null);
+
+                let jsnlist = [];
+                let fetchXML = `
+                                                <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true">
+                                                <entity name="iota_jsn">
+                                                    <attribute name="iota_name" />
+                                                    <attribute name="iota_jsnid" />
+                                                    <attribute name="iota_suffix" />
+                                                    <order attribute="iota_name" descending="false" />
+                                                    <filter type="and">
+                                                    <condition attribute="statecode" operator="eq" value="0" />{0}
+                                                    <condition attribute="iota_name" operator="not-null" />
+                                                    </filter>
+                                                </entity>
+                                                </fetch>
+                                                `;
+
+                if (projectId) {
+                    fetchXML = fetchXML.replace('{0}', '<condition attribute="iota_projectid" operator="eq" value="' + projectId + '" />');
+                }
+
+
+                let fetchXMLResult = "?fetchXml=" + fetchXML;
+                await xrmWebAPI.retrieveMultipleRecords("iota_jsn", fetchXMLResult).then(function sucess(jsns) {
+                    jsns.entities.forEach(jsn => {
+                        let x = {};
+                        x.id = jsn.iota_jsnid;
+                        x.name = jsn.iota_name;
+                        x.other = jsn.iota_suffix;
+
+                        jsnlist.push(x);
+                    }
+                    );
+                }, function fail(err) {
+                    console.log(err);
+                });
+                return jsnlist;
+            }
+
+            var _bindJsnDropdown = async function (projectId) {
+                debugger;
+                try {
+                    $("#ddlJsn").html('');
+                    let lstrm = await _getjsnDatabyProjectId(projectId);
+
+                    $("#ddlJsn").append($("<option></option>").attr("value", '-1').text('All JSN'));
+
+                    lstrm.forEach((item) => {
+                        var text = item.other ? item.name + " " + item.other : item.name;
+                        $("#ddlJsn").append($("<option></option>").attr("value", item.id).text(text));
+                    })
+                    _createTemplate();
+
+                } catch (e) { }
+            }
+            var _bindDeptDropdown = async function (projectId) {
+                debugger;
+                console.log("Inside _bindDeptDropdown function :")
+                try {
+                    $("#ddlDept").html('');
+                    departments = await _getDeptDatabyProjectId(projectId);
+
+                    $("#ddlDept").append($("<option></option>").attr("value", '-1').text('All Department'));
+
+                    departments.forEach((item) => {
+                        $("#ddlDept").append($("<option></option>").attr("value", item.id).text(item.name));
+                    })
+
+                } catch (e) { console.log("Inside bindDeptDropdown" + e.message); }
+            };
+
+            var _roomNoteOpen = async function (Id) {
+                debugger;
+                $(".main").addClass("blur-background");
+                $("#tablewrapdata").addClass("blur-background");
+
+                let roomNote = $("#RoomNote").css("display", "block");
+
+                roomnoteid = Id.parentNode.parentNode.firstChild.textContent;
+                let o = FinalData.filter((x) => x.roombyroomid == roomnoteid);
+                $(".note-editable").html("<div>Loading...</div>");
+
+                try {
+                    let query = `?$filter=iota_roombyroomid eq '${roomnoteid}' and _iota_roomnumber_value eq '${o[0].roomid}' and iota_generalnote ne null&$select=iota_meetingminutesid,iota_generalnote`;
+                    let response = await xrmWebAPI.retrieveMultipleRecords("iota_meetingminutes", query);
+
+                    if (response.entities.length > 0) {
+                        let meetingMinuteRecord = response.entities[0];
+                        let meetingMinuteId = meetingMinuteRecord.iota_meetingminutesid;
+
+                        $('#roomNote').attr("meetingMinuteId", meetingMinuteId);
+                        $('#roomNote').summernote();
+
+                        let notes = meetingMinuteRecord.iota_generalnote ? `<div>${meetingMinuteRecord.iota_generalnote}</div>` : '<div></div>';
+                        $(".note-editable").html(notes);
+                        $('#roomNote').attr("roomNote-old", meetingMinuteRecord.iota_generalnote);
+                    } else {
+                        $('#roomNote').summernote();
+                        let notes = meetingMinuteRecord.iota_generalnote ? `<div>${meetingMinuteRecord.iota_generalnote}</div>` : '<div></div>';
+                        $(".note-editable").html(notes);
+                    }
+                } catch (error) {
+                    console.error("Error fetching meeting minutes:", error);
+                    $(".note-editable").html("<div></div>");
+                }
+            };
+
+            var _getDeptDatabyProjectId = async function (pId) {
+                let lstDept = [];
+                let fetchXML = '<fetch mapping="logical">';
+                fetchXML += '<entity name="iota_department">';
+                fetchXML += '<attribute name="iota_departmentid"/>';
+                fetchXML += '<attribute name="iota_name"/>';
+                fetchXML += '<order descending="false" attribute="iota_name"/>';
+                fetchXML += '<filter type="and">';
+                fetchXML += '<condition attribute="statecode" operator="eq" value="0"/> {0}';
+                fetchXML += '</filter>';
+                fetchXML += '</entity>';
+                fetchXML += '</fetch>';
+
+                if (pId != null) {
+                    fetchXML = fetchXML.replace('{0}', '<condition attribute="iota_project" operator="eq" value="' + pId + '"/>');
+                }
+                else {
+                    fetchXML = fetchXML.replace('{0}', '<condition attribute="iota_isreserveddata" operator="eq" value="1" />');
+                }
+
+                let fetchXMLResult = "?fetchXml=" + fetchXML;
+                await xrmWebAPI.retrieveMultipleRecords("iota_department", fetchXMLResult).then(function success(departments) {
+                    departments.entities.forEach(department => {
+                        _department = {
+                            "id": department.iota_departmentid,
+                            "name": department.iota_name
+                        }
+                        lstDept.push(_department);
+                    }
+                    );
+                }, function fail(err) {
+                    console.log(err);
+                });
+                return lstDept;
+            };
+
+            var _createRoom = function () {
+                debugger;
+                let projectId = window.parent.Xrm.Page.getAttribute("iota_project").getValue()[0].id;
+                let replacePorjectId = projectId.replace("{", "").replace("}", "");
+                var entity = {};
+                entity.iota_name = $('#roomName').val();
+                entity.iota_roomname = $('#roomName').val();
+                entity["iota_Project@odata.bind"] = "/iota_projects(" + replacePorjectId.toLowerCase() + ")";
+                entity["iota_Department@odata.bind"] = "/iota_departments(" + $('#ddlDepartmentRoom').val() + ")";
+
+                xrmWebAPI.createRecord("iota_room", entity).then(function success(result) {
+                    document.getElementById("AddMeetingMinuties").classList.remove('blur-background');
+                    window.parent.Xrm.Utility.alertDialog("Room Record is Created");
+                    $("#ddlRoomnumber").append($("<option></option>").attr("value", result.id).text($('#roomName').val() + ' (' + $('#roomName').val() + ')'));
+
+                    $("#myModal").removeClass("blur-background");
+                }, function (error) {
+                    window.parent.Xrm.Utility.alertDialog(error.message);
+                    $("#myModal").removeClass("blur-background");
+                });
+                $("#myModal").removeClass("blur-background");
+            }
+
+            var _createRoomSelect = async function () {
+                debugger;
+                $("#ddlRoomnumber").html('');
+                let departmentId = $("#ddlDepartment").val();
+                if (departmentId == null) {
+                    departmentId = $("#ddlDepartmentRoom").val();
+                }
+                let lstrm = await _getRoomsDatabyDeptId(departmentId);
+                if (lstrm.length > 0) {
+                    lstrm.forEach((item) => {
+                        $("#ddlRoomnumber").append($("<option></option>").attr("value", item.id).text(item.name));
+                    });
+                    let roomId = $("#ddlRoomnumber").val();
+                    let result = await xrmWebAPI.retrieveMultipleRecords("iota_room", "?$select=iota_roomname&$filter=iota_roomid eq '" + roomId + "'");
+                    if (result.entities[0] != null) {
+                        let roomName = result.entities[0]["iota_roomname"];
+                        $('#roomname').val(roomName)
+                    }
+                }
+                else {
+                    $('#roomname').val("");
+                }
+
+            }
+
+            var _roomNameSet = async function (Id, roomNameId) {
+                debugger;
+                let roomId = $(Id).val();
+                let result = await xrmWebAPI.retrieveMultipleRecords("iota_room", "?$select=iota_roomname&$filter=iota_roomid eq '" + roomId + "'");
+                if (result.entities[0] != null) {
+                    let roomName = result.entities[0]["iota_roomname"];
+                    $(roomNameId).val(roomName);
+
+                }
+                else {
+                    Console.log("Room Name not available for Room Number :" + roomId);
+                }
+            }
+
+            var _createDept = async function () {
+                debugger;
+                let projectId = window.parent.Xrm.Page.getAttribute("iota_project").getValue()[0].id;
+                let replacePorjectId = projectId.replace("{", "").replace("}", "");
+                console.log(replacePorjectId);
+                let departmentName = $('#newddldept option:selected').text();
+                let entity = {};
+                entity["iota_Project@odata.bind"] = "/iota_projects(" + replacePorjectId + ")";
+                entity.iota_name = $('#newddldept option:selected').text();
+
+                xrmWebAPI.createRecord("iota_department", entity).then(
+                    function success(result) {
+                        $("#ddlDepartment").append($("<option></option>").attr("value", result.Id).text(departmentName));
+                        $("#ddlDepartmentRoom").append($("<option></option>").attr("value", result.Id).text(departmentName));
+
+                        window.parent.Xrm.Utility.alertDialog("Deparment Record is Created !");
+                        $("#myModal").removeClass("blur-background");
+                    },
+                    function (error) {
+                        window.parent.Xrm.Utility.alertDialog("Deparment is already Exits !");
+                        $("#myModal").removeClass("blur-background");
+                    }
+                );
+            }
+
+            async function deptAlertBox(id, departmentId) {
+                debugger;
+                $(".main").addClass("blur-background");
+                $("#tablewrapdata").addClass("blur-background");
+
+                let oldDeptId = document.getElementById(id.parentNode.id).getAttribute("deparmentid");
+                var confirmStrings = {
+                    text: "All Meeting minites change releted record.",
+                    title: "Department Change"
+                };
+                var confirmOptions = {
+                    height: 120,
+                    width: 260
+                };
+                window.parent.Xrm.Navigation.openConfirmDialog(confirmStrings, confirmOptions).then(function (success) {
+                    if (success.confirmed) {
+                        _getMeetingDepartmentUpdate(oldDeptId, departmentId);
+
+                    } else {
+                        $(".main").removeClass("blur-background");
+                        $("#tablewrapdata").removeClass("blur-background");
+                    }
+                });
+            }
+
+            var _getMeetingDepartmentUpdate = async function (oldDeptId, departmentId) {
+                debugger;
+                let fetchXml = '<fetch mapping="logical">';
+                fetchXml += '<entity name="iota_meetingminutes">';
+                fetchXml += '<attribute name="iota_meetingminutesid" />';
+                fetchXml += '<filter type="and">';
+                fetchXml += '<condition attribute="iota_department" operator="eq" value="' + oldDeptId + '" />';
+                fetchXml += '</filter>';
+                fetchXml += '</entity>';
+                fetchXml += '</fetch>';
+                let fetchXMLResult = "?fetchXml=" + fetchXml;
+                let results = await xrmWebAPI.retrieveMultipleRecords("iota_meetingminutes", fetchXMLResult);
+                for (var i = 0; i < results.entities.length; i++) {
+                    //window.parent.Xrm.Utility.alertDialog(results.entities.length);
+                    let meetingminutesid = results.entities[i]["iota_meetingminutesid"];
+                    let entity = {};
+                    entity["iota_department@odata.bind"] = "/iota_departments(" + departmentId + ")";
+                    xrmWebAPI.updateRecord("iota_meetingminutes", meetingminutesid, entity).then(
+                        function success(result) {
+                            window.parent.Xrm.Utility.alertDialog("All Department are updated.");
+                            _createTemplate();
+                        },
+                        function (error) {
+                            window.parent.Xrm.Utility.alertDialog(error.message);
+                        });
+                }
+                $(".main").removeClass("blur-background");
+                $("#tablewrapdata").removeClass("blur-background");
+            }
+
+            $("input[data-type='currency'] ,td[data-type='currency']").on({
+                keyup: function () {
+                    formatCurrency($(this));
+                },
+                blur: function () {
+                    formatCurrency($(this), "blur");
+                }
+            });
+
+            function formatNumber(n) {
+                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+
+            function formatCurrency(input, blur) {
+
+                var input_val = input.val();
+                if (input_val === "") { return; }
+                var original_len = input_val.length;
+                var caret_pos = input.prop("selectionStart");
+
+                if (input_val.indexOf(".") >= 0) {
+                    var decimal_pos = input_val.indexOf(".");
+                    var left_side = input_val.substring(0, decimal_pos);
+                    var right_side = input_val.substring(decimal_pos);
+
+                    left_side = formatNumber(left_side);
+                    right_side = formatNumber(right_side);
+
+                    if (blur === "blur") {
+                        right_side += "00";
+                    }
+
+                    right_side = right_side.substring(0, 2);
+                    input_val = "$" + left_side + "." + right_side;
+
+                } else {
+
+                    input_val = formatNumber(input_val);
+                    input_val = "$" + input_val;
+
+                    if (blur === "blur") {
+                        input_val += ".00";
+                    }
+                }
+
+                input.val(input_val);
+
+                var updated_len = input_val.length;
+                caret_pos = updated_len - original_len + caret_pos;
+                input[0].setSelectionRange(caret_pos, caret_pos);
+            }
+
+            $('#createDept').click(async function () {
+                debugger;
+                $("#myModal").addClass("blur-background");
+                $('#newddldept').html('');
+
+                try {
+                    $("#newddldept").html('');
+                    let result = await xrmWebAPI.retrieveRecord("iota_meetingminutesconfig", guid, "?$select=_iota_project_value,iota_meetingdate,iota_meetingname");
+                    projectId = result["_iota_project_value"];
+                    let reverseDept = await _getDeptDatabyProjectId();
+
+
+                    reverseDept.forEach((item) => {
+                        $("#newddldept").append($("<option></option>").attr("value", item.id).text(item.name));
+                    });
+                } catch (e) { console.log("Inside bindDeptDropdown" + e.message); }
+
+            });
+
+            $('#btn-note').click(async function () {
+                debugger;
+                $(".main").addClass("blur-background");
+                $("#tablewrapdata").addClass("blur-background");
+                $("#summernote").css("display", "block");
+                $('#summernote').summernote();
+                let result = await xrmWebAPI.retrieveRecord("iota_meetingminutesconfig", guid, "?$select=iota_generalnotes,iota_name");
+                var iota_generalnotes = result["iota_generalnotes"];
+                var iota_name = result["iota_name"];
+                let MeetingMinutesName = $("#text-meet").val();
+                let MeetingMinutesDate = $("#date-meet").val();
+
+                var report = '<img src="../image/endeavor_logo" style ="height:56px">'
+                report += '<p style="font-size:14px;font-weight: bold;">Meeting Date : ' + MeetingMinutesDate + "</p>";
+                report += '<p style="font-size:14px;font-weight: bold;">' + MeetingMinutesName + '</p>';
+
+                if (result) {
+                    if (iota_name != null && iota_name != "") { report += '<p style="font-size:14px;font-weight: bold;">' + iota_name + "</p>"; }
+                    report += '<p style="font-size:18px;font-weight: bold;color :darkblue">General Note:</p>';
+                    if (iota_generalnotes != null && iota_generalnotes != "") { report += '<p style="font-size :14px" id ="generalnotes">' + iota_generalnotes + '</p>'; }
+                    $("#summernote").attr("projectNote-old", iota_generalnotes);
+                    $(".note-editable").html(report)
+                }
+            });
+
+
+
+            return {
+                onLoad: _onload,
+                BindDeptDropdown: _bindDeptDropdown,
+                sortTable: _sortTable,
+                BindRoomDropdown: _bindRoomDropdown,
+                CreateTemplate: _createTemplate,
+                ClosePopup: _closePopup,
+                RemoveBlurBackdeparment: _removeBlurBackdeparment,
+                RemoveBlurBack: _removeBlurBack,
+                RoomNoteOpen: _roomNoteOpen,
+                RoomNoteSave: _roomNoteSave,
+                OpenRoomPopup: _openRoomPopup,
+                CreateRoom: _createRoom,
+                CreateRoomSelect: _createRoomSelect,
+                CreateDept: _createDept,
+                RoomNameSet: _roomNameSet,
+                AddNewPopup: _addNewPopup,
+                CreateMeetingMinutes: _createMeetingMinutes,
+                PrePopulateFieldValues: _prePopulateFieldValues,
+                TrackChanges: trackChanges,
+                NextPage: _nextPage,
+                PrevPage: _prevPage,
+
+            }
+        }
+        )();
+    </script>
+</body>
+</html>
