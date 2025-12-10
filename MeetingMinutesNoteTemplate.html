@@ -98,6 +98,7 @@
             background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
             box-shadow: var(--shadow-md);
             padding: 10px 0;
+            z-index: 1000;
         }
 
         .header .text-center {
@@ -109,16 +110,82 @@
 
         .header .fixed-top {
             background: white;
-            padding: 12px 15px;
+            padding: 15px 20px;
             border-radius: var(--radius-md);
-            margin: 0 10px;
-            box-shadow: var(--shadow-sm);
+            margin: 5px 15px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
-        .header span {
+        .header .fixed-top span {
             color: var(--secondary-color);
             font-weight: 500;
-            margin-right: 8px;
+            font-size: 13px;
+            margin-right: 6px;
+            white-space: nowrap;
+        }
+
+        .header .ddlheader,
+        .header .dateheader,
+        .header .inputheader {
+            height: 34px;
+            min-width: 140px;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 6px 10px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .header .ddlheader:focus,
+        .header .dateheader:focus,
+        .header .inputheader:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.15);
+        }
+
+        .header .a-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: white;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .header .a-btn:hover {
+            background-color: var(--background-light);
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .header .a-btn img {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .header .a-btn:hover img {
+            opacity: 1;
+        }
+
+        .header .btn {
+            height: 36px;
+            padding: 6px 18px;
+            font-size: 13px;
+            white-space: nowrap;
+            margin-left: 8px;
         }
 
         /* Modern Input Fields */
@@ -785,12 +852,11 @@
                 <span id="projectValue"> </span>
             </div>
         </div>
-        <div class="row fixed-top position-fixed">
-            <div class="fixed-top" style="top: 41px;
-    margin-left: 7px;">
+        <div class="row fixed-top position-fixed" style="top: 41px;">
+            <div class="fixed-top">
                 <span>Department</span>
                 <select class="ddlheader" id="ddlDept" onchange="Advic.MeetingMinutes.BindRoomDropdown()">
-                    <option value="-1">All Deparment</option>
+                    <option value="-1">All Department</option>
                 </select>
                 <span>Room</span>
                 <select class="ddlheader" id="ddlRoom">
@@ -801,12 +867,11 @@
                     <option value="-1">All JSN</option>
                 </select>
                 <span>Meeting Date</span>
-                <input type="date" name="Meeting Date" class="dateheader" id="date-meet" style="
-                        width: 136px;">
+                <input type="date" name="Meeting Date" class="dateheader" id="date-meet">
                 <span>Meeting Name</span>
                 <input type="text" name="Meeting Name" id="text-meet" class="inputheader" placeholder="Meeting Name">
-                <a href="javascript:void(0)" class="a-btn" onclick="Advic.MeetingMinutes.CreateTemplate(true);">
-                    <img src="../img/refresh.png">
+                <a href="javascript:void(0)" class="a-btn" onclick="Advic.MeetingMinutes.CreateTemplate(true);" title="Refresh">
+                    <img src="../img/refresh.png" alt="Refresh">
                 </a>
                 <button type="button" class="btn btn-outline-primary" id="btn-note" data-bs-toggle="modal"
                         data-bs-target="#note">
@@ -1053,7 +1118,7 @@
                 </div>
                 <div class="modal-footer" style="position: relative;border: none;left: 5px;">
                     <button id="save" onclick="Advic.MeetingMinutes.CreateMeetingMinutes()"
-                            class="addnewSave btn btn-outline-primary" data-bs-dismiss="modal">
+                            class="addnewSave btn btn-outline-primary">
                         Save
                     </button>
                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
