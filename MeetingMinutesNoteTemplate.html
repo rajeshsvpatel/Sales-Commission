@@ -7,17 +7,41 @@
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="select222.css">
 
-    <!-- jQuery - Single version -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery - Local files first (for offline mode), then CDN fallback -->
+    <script src="../js/jqueryv3.5.1.js"></script>
+    <script>
+        // Fallback to CDN if local jQuery fails
+        if (typeof jQuery === 'undefined') {
+            document.write('<script src="https://code.jquery.com/jquery-3.6.0.min.js"><\/script>');
+        }
+    </script>
 
-    <!-- Select2 CSS - Single version -->
+    <!-- Bootstrap JavaScript Bundle (includes Popper.js) - Required for modals -->
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Fallback to CDN if local Bootstrap fails
+        if (typeof bootstrap === 'undefined') {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"><\/script>');
+        }
+    </script>
+
+    <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="select222.css">
 
     <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script>
+        // Fallback to newer version if above fails
+        if (typeof $.fn.select2 === 'undefined') {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"><\/script>');
+        }
+    </script>
 
     <!-- Ionicons -->
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <!-- Summernote -->
     <link rel="stylesheet" href="../css/summernote.css">
     <script src="../js/summernote.js"></script>
 
@@ -582,8 +606,8 @@
                             <div class="col-75">
                                 <select class="addnewpopupinput" id="ddlDepartment"
                                         onchange="Advic.MeetingMinutes.CreateRoomSelect()"></select>
-                                <button id="createDept" class="btn btn-outline-primary" data-toggle="modal"
-                                        data-target="#deptModal">
+                                <button id="createDept" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#deptModal">
                                     +
                                 </button>
                                 <p id="deptLable"></p>
@@ -596,8 +620,8 @@
                             <div class="col-75">
                                 <select class="addnewpopupinput" id="ddlRoomnumber"
                                         onchange="console.log('roomnumber'); Advic.MeetingMinutes.RoomNameSet('#ddlRoomnumber','#roomname')"></select>
-                                <button id="createRoom" class="btn btn-outline-primary" data-toggle="modal"
-                                        data-target="#roomModal" onclick="Advic.MeetingMinutes.OpenRoomPopup()">
+                                <button id="createRoom" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#roomModal" onclick="Advic.MeetingMinutes.OpenRoomPopup()">
                                     +
                                 </button>
                                 <p id="rNumLable"></p>
@@ -698,7 +722,7 @@
                 </div>
                 <div class="modal-footer" style="position: relative;border: none;left: 5px;">
                     <button id="save" onclick="Advic.MeetingMinutes.CreateMeetingMinutes()"
-                            class="addnewSave btn btn-outline-primary" data-dismiss="modal">
+                            class="addnewSave btn btn-outline-primary" data-bs-dismiss="modal">
                         Save
                     </button>
                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
@@ -709,12 +733,12 @@
             </div>
         </div>
     </div>
-    <div class="modal in" id="deptModal" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal in" id="deptModal" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" style="font-weight: bold;">New Department</h3>
-                    <button type="button" class="btn-close" data-dismiss="modal"
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
                             onclick="Advic.MeetingMinutes.RemoveBlurBack()">
                     </button>
 
@@ -733,9 +757,9 @@
                 </div>
                 <div class="modal-footer" style="position: relative;border: none;left: 5px;">
                     <button id="save" onclick="Advic.MeetingMinutes.CreateDept()" class="btn btn-outline-primary"
-                            data-dismiss="modal">
+                            data-bs-dismiss="modal">
                         Save
-                    </button><button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                    </button><button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
                                      onclick="Advic.MeetingMinutes.RemoveBlurBack()">
                         Close
                     </button>
@@ -743,12 +767,12 @@
             </div>
         </div>
     </div>
-    <div class="modal in" id="roomModal" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal in" id="roomModal" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" style="font-weight: bold;">New Room</h3>
-                    <button type="button" class="btn-close" data-dismiss="modal"
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
                             onclick="Advic.MeetingMinutes.RemoveBlurBack()"></button>
                 </div>
                 <div class="modal-body">
@@ -779,10 +803,10 @@
                 </div>
                 <div class="modal-footer" style="position: relative;border: none;left: 5px;">
                     <button id="save" onclick="Advic.MeetingMinutes.CreateRoom()" class="btn btn-outline-primary"
-                            data-dismiss="modal">
+                            data-bs-dismiss="modal">
                         Save
                     </button>
-                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
                             onclick="Advic.MeetingMinutes.RemoveBlurBack()">
                         Close
                     </button>
