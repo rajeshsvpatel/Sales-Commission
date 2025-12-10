@@ -442,6 +442,39 @@
             height: 100%;
             max-height: 79vh;
         }
+
+        /* Nested Modal Support - Keeps parent modal visible when opening child modal */
+        .modal {
+            z-index: 1050;
+        }
+
+        .modal-backdrop {
+            z-index: 1040;
+        }
+
+        /* When nested modal is open, increase z-index */
+        .modal.show ~ .modal {
+            z-index: 1060;
+        }
+
+        .modal.show ~ .modal-backdrop {
+            z-index: 1055;
+        }
+
+        /* Ensure parent modal stays visible behind nested modal */
+        #myModal.show {
+            z-index: 1050 !important;
+        }
+
+        #deptModal.show,
+        #roomModal.show {
+            z-index: 1060 !important;
+        }
+
+        /* Multiple backdrop support */
+        body.modal-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -606,8 +639,8 @@
                             <div class="col-75">
                                 <select class="addnewpopupinput" id="ddlDepartment"
                                         onchange="Advic.MeetingMinutes.CreateRoomSelect()"></select>
-                                <button id="createDept" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                        data-bs-target="#deptModal">
+                                <button id="createDept" class="btn btn-outline-primary"
+                                        onclick="Advic.MeetingMinutes.OpenDeptModal()">
                                     +
                                 </button>
                                 <p id="deptLable"></p>
@@ -620,8 +653,8 @@
                             <div class="col-75">
                                 <select class="addnewpopupinput" id="ddlRoomnumber"
                                         onchange="console.log('roomnumber'); Advic.MeetingMinutes.RoomNameSet('#ddlRoomnumber','#roomname')"></select>
-                                <button id="createRoom" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                        data-bs-target="#roomModal" onclick="Advic.MeetingMinutes.OpenRoomPopup()">
+                                <button id="createRoom" class="btn btn-outline-primary"
+                                        onclick="Advic.MeetingMinutes.OpenRoomModal()">
                                     +
                                 </button>
                                 <p id="rNumLable"></p>
@@ -1442,6 +1475,49 @@
             var _removeBlurBack = function () {
                 $("#myModal").removeClass("blur-background");
             }
+
+            // Open Department modal without closing parent modal
+            var _openDeptModal = async function () {
+                debugger;
+                try {
+                    // Populate department dropdown
+                    $("#newddldept").html('');
+                    let departments = await _getDeptDatabyProjectId(projectId);
+                    departments.forEach((item) => {
+                        $("#newddldept").append($("<option></option>").attr("value", item.id).text(item.name));
+                    });
+
+                    // Open nested modal using Bootstrap 5 Modal API
+                    var deptModal = new bootstrap.Modal(document.getElementById('deptModal'), {
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    deptModal.show();
+                } catch (error) {
+                    console.error("Error opening department modal:", error);
+                }
+            };
+
+            // Open Room modal without closing parent modal
+            var _openRoomModal = async function () {
+                debugger;
+                try {
+                    // Call existing openRoomPopup logic
+                    await _openRoomPopup();
+
+                    // Open nested modal using Bootstrap 5 Modal API
+                    var roomModal = new bootstrap.Modal(document.getElementById('roomModal'), {
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    roomModal.show();
+
+                    // Remove the blur that _openRoomPopup added
+                    $("#myModal").removeClass("blur-background");
+                } catch (error) {
+                    console.error("Error opening room modal:", error);
+                }
+            };
 
             var _closePopup = function () {
                 debugger;
@@ -3105,6 +3181,8 @@
                 RoomNoteOpen: _roomNoteOpen,
                 RoomNoteSave: _roomNoteSave,
                 OpenRoomPopup: _openRoomPopup,
+                OpenDeptModal: _openDeptModal,
+                OpenRoomModal: _openRoomModal,
                 CreateRoom: _createRoom,
                 CreateRoomSelect: _createRoomSelect,
                 CreateDept: _createDept,
