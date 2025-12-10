@@ -417,9 +417,12 @@
         }
 
         #pagination {
-            text-align: right;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             font-size: 14px;
             font-weight: bold;
+            padding: 10px;
         }
 
             #pagination button {
@@ -463,13 +466,24 @@
             position: relative;
         }
 
-        /* When nested modal is open, increase z-index */
-        .modal.show ~ .modal {
-            z-index: 1060;
+        /* When nested modal is open, adjust backdrop */
+        .modal.show ~ .modal-backdrop {
+            z-index: 1031;
+            background-color: rgba(0, 0, 0, 0.3);
         }
 
-        .modal.show ~ .modal-backdrop {
+        /* Gray overlay on parent modal when child modal opens */
+        #myModal.has-child-modal .modal-content::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(128, 128, 128, 0.65);
             z-index: 1055;
+            pointer-events: none;
+            border-radius: inherit;
         }
 
         /* Ensure parent modal stays visible behind nested modal */
@@ -483,8 +497,10 @@
 
         #myModal .modal-content {
             z-index: 1052 !important;
+            position: relative;
         }
 
+        /* Nested modals - higher z-index for focus */
         #deptModal.show,
         #roomModal.show {
             z-index: 1060 !important;
@@ -498,6 +514,13 @@
         #deptModal .modal-content,
         #roomModal .modal-content {
             z-index: 1062 !important;
+        }
+
+        /* Nested modal specific backdrop */
+        #deptModal.show ~ .modal-backdrop,
+        #roomModal.show ~ .modal-backdrop {
+            z-index: 1056 !important;
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
         /* General Note and Room Note modals */
@@ -1525,6 +1548,9 @@
             var _openDeptModal = async function () {
                 debugger;
                 try {
+                    // Add gray overlay class to parent modal
+                    $("#myModal").addClass("has-child-modal");
+
                     // Populate department dropdown
                     $("#newddldept").html('');
                     let departments = await _getDeptDatabyProjectId(projectId);
@@ -1538,6 +1564,11 @@
                         keyboard: false
                     });
                     deptModal.show();
+
+                    // Remove gray overlay when child modal closes
+                    document.getElementById('deptModal').addEventListener('hidden.bs.modal', function () {
+                        $("#myModal").removeClass("has-child-modal");
+                    }, { once: true });
                 } catch (error) {
                     console.error("Error opening department modal:", error);
                 }
@@ -1547,6 +1578,9 @@
             var _openRoomModal = async function () {
                 debugger;
                 try {
+                    // Add gray overlay class to parent modal
+                    $("#myModal").addClass("has-child-modal");
+
                     // Call existing openRoomPopup logic
                     await _openRoomPopup();
 
@@ -1559,6 +1593,11 @@
 
                     // Remove the blur that _openRoomPopup added
                     $("#myModal").removeClass("blur-background");
+
+                    // Remove gray overlay when child modal closes
+                    document.getElementById('roomModal').addEventListener('hidden.bs.modal', function () {
+                        $("#myModal").removeClass("has-child-modal");
+                    }, { once: true });
                 } catch (error) {
                     console.error("Error opening room modal:", error);
                 }
@@ -2065,19 +2104,29 @@
                     return;
                 }
 
-                // Hide pagination if no data or only one page
-                if (totalPages < 1) {
+                // Hide pagination if no data
+                if (totalPages < 1 || cachedData.length === 0) {
                     paginationDiv.style.display = "none";
                     return;
                 }
 
-                // Show pagination when more than 1 page
-                paginationDiv.style.display = "block";
+                // Show pagination
+                paginationDiv.style.display = "flex";
+
+                // Calculate row range for current page
+                const totalRows = cachedData.length;
+                const startRow = (currentPage - 1) * pageSize + 1;
+                const endRow = Math.min(currentPage * pageSize, totalRows);
 
                 paginationDiv.innerHTML = `
-            <button onclick="Advic.MeetingMinutes.PrevPage()" ${currentPage === 1 ? "disabled" : ""}>⬅ Prev</button>
-            <span style="margin: 0 10px;">Page ${currentPage} of ${totalPages}</span>
-            <button onclick="Advic.MeetingMinutes.NextPage()" ${currentPage === totalPages ? "disabled" : ""}>Next ➡</button>
+            <div style="flex: 1; text-align: left; font-weight: bold;">
+                Showing ${startRow}-${endRow} of ${totalRows} rows
+            </div>
+            <div style="flex: 1; text-align: right;">
+                <button onclick="Advic.MeetingMinutes.PrevPage()" ${currentPage === 1 ? "disabled" : ""}>⬅ Prev</button>
+                <span style="margin: 0 10px;">Page ${currentPage} of ${totalPages}</span>
+                <button onclick="Advic.MeetingMinutes.NextPage()" ${currentPage === totalPages ? "disabled" : ""}>Next ➡</button>
+            </div>
         `;
             }
 
